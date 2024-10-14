@@ -2,15 +2,11 @@
 title: Cloudflare R2+Workers！马上搭建自己的云上图床！
 published: 2024-10-14
 description: ''
-image: ''
+image: 'assets/images/'
 tags: [Cloudflare]
 category: ''
 draft: false 
 lang: ''
----
-
-本文为：https://xfeed.app/notes/71448-15 的重制版
-
 ---
 
 ### **结果图**
