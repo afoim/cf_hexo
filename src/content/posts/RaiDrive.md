@@ -9,8 +9,8 @@ draft: false
 lang: ''
 ---
 
-> [!CAUTION]
-> 注意：此软件具有弹窗广告，请自备拦截软件
+> [!WARNING]
+> 此软件具有广告
 
 ##### 前几天，我推荐使用SSHFS来将Linux的目录挂载为本地磁盘方便访问，今天，我又发现一个神级软件：[RaiDrive](https://www.raidrive.com)
 
