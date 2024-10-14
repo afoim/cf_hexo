@@ -199,9 +199,11 @@ lang: ''
    
    - category：文章分类
 
-5. 欸？有的人就会问了，MarkDown固然好，但是我要如何处理图片的置入呢
+5. 我们还需要更改根目录下的 `astro.config.mjs` 。在第34行更改 `stie:` 为你的站点URL，如： `site: "https://onani.cn",`
 
-6. 这也很简单，多亏了MarkText这款软件，我们也可以像编辑Typecho一样直接使用Ctrl+CV来在MarkDown语法中置入图片，但是我们需要一些小设置：
+6. 欸？有的人就会问了，MarkDown固然好，但是我要如何处理图片的置入呢
+
+7. 这也很简单，多亏了MarkText这款软件，我们也可以像编辑Typecho一样直接使用Ctrl+CV来在MarkDown语法中置入图片，但是我们需要一些小设置：
    
    - 依次点击：MarkText软件的左上角的三条杠 -> File -> Perferences -> 左侧的Image分类 -> 如图设置 -> 注意更改第一个选项为Copy开头的选项，将Perfer开关打开，然后上下两个文本框一个填写绝对路径一个填写相对路径
    
@@ -209,7 +211,7 @@ lang: ''
    
    - 这样，当置入图片时，会往 `assets/images` 文件夹复制一份，然后通过`![1](assets/images/1.jpg)`写入MarkDown文件。这样网站就能成功读取到图片啦。而你只需要Ctrl+CV，其他操作MarkText都会自动处理
 
-7. 至此，你已经会用MarkText编写MarkDown语法的博文了
+8. 至此，你已经会用MarkText编写MarkDown语法的博文了
 
 #### 本地预览，然后发布到Github
 
