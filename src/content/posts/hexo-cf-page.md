@@ -37,15 +37,21 @@ lang: ''
 > 
 > 因为我使用的主题fuwari比较特殊，它直接改写了Hexo的本体逻辑，并且它的代码仓库将Hexo+主题整合到了一起。所以此教程将不会单独安装Hexo，我们可以直接拉取fuwari的代码仓库并且使用它定义的命令调教你的Hexo
 
-1. Fork[saicaca/fuwari: ✨A static blog template built with Astro. (github.com)](https://github.com/saicaca/fuwari)这个仓库，避免有小废物不会Fork仓库，这里附上图片教程![](assets/images/2024-10-14-12-15-44-image.png)![](assets/images/2024-10-14-12-17-03-image.png)
+1. Fork仓库：
+   
+   ::github{repo="saicaca/fuwari"}
 
-2. 然后将仓库克隆到本地：`git clone <你的仓库URL>`（推荐使用SSH，可以不用魔法来推送更改）
+2. 避免有小废物不会Fork仓库，这里附上图片教程
 
-3. 首先，全局安装pnpm：`npm install -g pnpm`（如果npm国内拉取过慢，请尝试cnpm：[npmmirror 镜像站](https://npmmirror.com/)）
+3. ![](assets/images/2024-10-14-12-15-44-image.png)![](assets/images/2024-10-14-12-17-03-image.png)
 
-4. 然后在项目根目录安装依赖：`pnpm install`  和 `pnpm add sharp`
+4. 然后将仓库克隆到本地：`git clone <你的仓库URL>`（推荐使用SSH，可以不用魔法来推送更改）
 
-5. 至此，你成功在本地部署了Hexo
+5. 首先，全局安装pnpm：`npm install -g pnpm`（如果npm国内拉取过慢，请尝试cnpm：[npmmirror 镜像站](https://npmmirror.com/)）
+
+6. 然后在项目根目录安装依赖：`pnpm install`  和 `pnpm add sharp`
+
+7. 至此，你成功在本地部署了Hexo
 
 > [!TIP]
 > 
