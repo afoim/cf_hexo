@@ -1,10 +1,10 @@
 ---
 title: 使用NoneBot2搭建你的QQBot！
 published: 2024-10-08
-description: ''
-image: ''
+description: '使用Lagrange连接NoneBot2，打造自己的聊天机器人'
+image: './assets/images/QmcMSSKysZmgUCUk9W7hQUvZCtVSFH6hGKHctg99yo1yDE.webp'
 tags: [QQBot, Lagrange]
-category: ''
+category: '开发'
 draft: false 
 lang: 'zh_CN'
 ---
