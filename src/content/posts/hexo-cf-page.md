@@ -187,7 +187,7 @@ lang: ''
    
    - description：文章描述，正常会显示在文章标题下面
    
-   - image：文章封面图（同目录需要写 `./` 如：`./assets/images/2024-10-14-11-33-28-image.png`
+   - image：文章封面图（同目录需要写 `./` 如：`./assets/images/2024-10-14-11-33-28-image.png`）
    
    - tag：文章标签
    
