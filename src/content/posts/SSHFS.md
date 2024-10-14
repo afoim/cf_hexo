@@ -2,7 +2,7 @@
 title: 使用SSHFS将Linux目录挂载为Windows磁盘
 published: 2024-10-12
 description: 'SSHFS拥有图形界面，可以通过SFTP协议将Linux目录映射为一个本地磁盘，便于管理文件'
-image: './asstes/images/QmZZkpG3gkkQjGExXvG9vbuAJyBfHGWEFH2Bk8YzhSSqwx.webp'
+image: './assets/images/QmZZkpG3gkkQjGExXvG9vbuAJyBfHGWEFH2Bk8YzhSSqwx.webp'
 tags: [SSHFS]
 category: '实用工具'
 draft: false 

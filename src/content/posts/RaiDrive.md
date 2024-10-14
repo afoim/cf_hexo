@@ -2,7 +2,7 @@
 title: 来试试RaiDrive，薄纱SSHFS！各大网盘、对象存储、Linux目录通通挂载为本地硬盘！
 published: 2024-10-14
 description: 'RaiDrive相比于SSHFS具有高达42中服务和协议支持挂载到本地硬盘，美中不足的是，它拥有弹窗广告'
-image: './assets/images/'
+image: './assets/images/QmRVcW8wxUMVfgREhPWxoDvyfez6B5RS2WxvRT2k75xgMD.webp'
 tags: [RaiDrive]
 category: '实用工具'
 draft: false 
