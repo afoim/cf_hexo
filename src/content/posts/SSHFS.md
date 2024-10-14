@@ -23,11 +23,11 @@ lang: ''
 
 1. 下载并安装下面的软件
 
-https://github.com/billziss-gh/sshfs-win
+::github{repo="billziss-gh/sshfs-win"}
 
-https://github.com/billziss-gh/winfsp
+::github{repo="billziss-gh/winfsp"}
 
-https://github.com/evsar3/sshfs-win-manager
+::github{repo="evsar3/sshfs-win-manager:"}
 
 2. 打开SSHFS-Win Manager，添加你的SSH服务器（我这里使用私钥连接）
    ![image](https://ipfs.crossbell.io/ipfs/QmccEuSGovyVuJeTRYEUKNr2XSPpKTeoqq82rZYMyhazh2?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
