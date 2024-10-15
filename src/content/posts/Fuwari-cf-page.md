@@ -1,9 +1,9 @@
 ---
-title: Hexo静态博客+Cloudflare Pages，只需一个域名，带你搭建博主同款博客！
+title: Fuwari静态博客+Cloudflare Pages，只需一个域名，带你搭建博主同款博客！
 published: 2024-10-14
-description: 'Hexo是一个静态博客框架，Cloudflare Pages是一个托管静态网站的服务，将他俩结合即可得到一个快速安全无需托管的高效博客'
+description: 'Fuwari是一个静态博客框架，Cloudflare Pages是一个托管静态网站的服务，将他俩结合即可得到一个快速安全无需托管的高效博客'
 image: './assets/images/2024-10-15-09-04-45-image.png'
-tags: [Hexo, Cloudflare Pages]
+tags: [Fuwari, Cloudflare Pages]
 category: '运维'
 draft: false 
 lang: ''
@@ -15,25 +15,21 @@ lang: ''
 
 2. [Git - Downloads (git-scm.com)](https://git-scm.com/downloads)：最牛逼的版本控制器，这里用于对Github进行操作，当然，你也可以尝试使用[GitHub Desktop | Simple collaboration from your desktop](https://github.com/apps/desktop)但就我而言，这玩意更难用
 
-3. [Node.js — Run JavaScript Everywhere (nodejs.org)](https://nodejs.org/en)：Hexo基于Node.js，你需要安装这个来搭建博客
+3. [Node.js — Run JavaScript Everywhere (nodejs.org)](https://nodejs.org/en)：Fuwari基于Node.js，你需要安装这个来搭建博客
 
-4. 一个[Github](https://github.com)账号：用于创建一个代码仓库存放Hexo文件
+4. 一个[Github](https://github.com)账号：用于创建一个代码仓库存放Fuwari文件
 
 5. 一个[Cloudflare](https://cloudflare.com)账号：用于创建一个Pages并且绑定域名支持访问
 
-6. [MarkText](https://www.marktext.cc)：这是一个可视化MarkDown编辑器，因为Hexo的每一篇文章/页面都是MarkDown，所以需要一个好用的编辑器
+6. [MarkText](https://www.marktext.cc)：这是一个可视化MarkDown编辑器，因为Fuwari的每一篇文章/页面都是MarkDown，所以需要一个好用的编辑器
 
 7. 你得会用MarkDown语法来编写文章，如果你不会可以参见：[Markdown 基本语法 | Markdown 官方教程](https://markdown.com.cn/basic-syntax/)
 
 ### 流程图
 
-本地部署Hexo，编写文章 -> 推送更改到远程Github仓库 -> Cloudflare Pages检测到仓库更新自动构建新的网站静态文件 -> 网站成功更改### 让我们开搞吧！
+本地部署Fuwari，编写文章 -> 推送更改到远程Github仓库 -> Cloudflare Pages检测到仓库更新自动构建新的网站静态文件 -> 网站成功更改### 让我们开搞吧！
 
-#### 首先，我们来本地部署Hexo
-
-> [!TIP]
-> 
-> 因为我使用的主题fuwari比较特殊，它直接改写了Hexo的本体逻辑，并且它的代码仓库将Hexo+主题整合到了一起。所以此教程将不会单独安装Hexo，我们可以直接拉取fuwari的代码仓库并且使用它定义的命令调教你的Hexo
+#### 首先，我们来本地部署Fuwari
 
 1. Fork仓库：
    
@@ -49,15 +45,15 @@ lang: ''
 
 6. 然后在项目根目录安装依赖：`pnpm install`  和 `pnpm add sharp`
 
-7. 至此，你成功在本地部署了Hexo
+7. 至此，你成功在本地部署了Fuwari
 
 > [!TIP]
 > 
 > 你也可以使用创建一个新的空仓库然后手动上传文件，并且可以将仓库可见性设为：Private
 
-#### 改写Hexo的基本信息并且清理多余文件
+#### 改写Fuwari的基本信息并且清理多余文件
 
-> 刚创建的Hexo可能带有一些示例的博主名，ICON，URL，介绍和示例文章，为了让用户知道这是你的博客，我们需要一一改写
+> 刚创建的Fuwari可能带有一些示例的博主名，ICON，URL，介绍和示例文章，为了让用户知道这是你的博客，我们需要一一改写
 
 1. 在根目录下的 `src` 文件夹中，你可以找到 `config.ts` 我们来开始改写
    
@@ -169,10 +165,9 @@ lang: ''
        name: 'CC BY-NC-SA 4.0',
        url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
      }
-     
      ```
 
-2. 清理多余文件。在根目录下的 `src/content/posts` 文件夹中会有一些示例文章，这些文章介绍了一些MarkDown语法和技巧，可以让你更快上手Hexo和fuwari，我们可以将其保存到别处
+2. 清理多余文件。在根目录下的 `src/content/posts` 文件夹中会有一些示例文章，这些文章介绍了一些MarkDown语法和技巧，可以让你更快上手Fuwari和fuwari，我们可以将其保存到别处
 
 3. 至此，你已经可以开始撰写文章了
 

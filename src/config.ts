@@ -73,6 +73,16 @@ export const profileConfig: ProfileConfig = {
       icon: 'fa6-brands:github',
       url: 'https://github.com/afoim',
     },
+    {
+      name: 'QQ',
+      icon: 'fa6-brands:qq',
+      url: 'https://qm.qq.com/q/Uy9kmDXHYO',
+    },
+    {
+      name: 'QQ',
+      icon: 'fa6-brands:envelope',
+      url: 'mailto:acofork@foxmail.com',
+    },
   ],
 }
 
