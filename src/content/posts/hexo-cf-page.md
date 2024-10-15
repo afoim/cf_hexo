@@ -67,6 +67,8 @@ lang: ''
    
    - lang：博客显示语言。注释已经列出了一些常用的值，如：en, zh_CN, zh_TW, ja, ko
    
+   - themeColor：hue值则是你的博客主题色，可以在你的博客右上角的画板图标确定喜欢的颜色再填写![](assets/images/2024-10-15-09-16-30-image.png)
+   
    - banner：src：即banner图片，支持http/https URL
    
    - favicon：src：即网站图标，支持http/https URL
