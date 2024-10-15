@@ -97,7 +97,7 @@ AutoBangumi:
 
 ---
 
-1. ~~前往Episode-ReName，克隆仓库~~（已被删库，可尝试https://alistapi.onani.cn/Episode-ReName.zip )
+1. ~~前往Episode-ReName，克隆仓库~~（已被删库，可尝试[Episode-ReName.zip | Onani-AList](https://alist.onani.cn/Episode-ReName.zip) )
 
 2. Win 可以通过右键菜单自动获取路径版.bat 通过右键一级目录选择自动剧集命名 。若使用.py 脚本则只能通过`python3 EpisodeReName.py "D:/qbdownloads/bangumi"`
 
