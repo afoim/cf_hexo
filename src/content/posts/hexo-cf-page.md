@@ -81,6 +81,8 @@ lang: ''
    
    - bio：即个性签名，会显示在头像和名字下面
    
+   - `NavBarConfig` 为导航栏设置的超链接。`ProfileConfig` 为你的用户的超链接，分别如图![](assets/images/2024-10-15-08-55-47-image.png)
+   
    - 这里我附上我的 `config.ts` 
    
    - ```ts
@@ -97,11 +99,11 @@ lang: ''
        subtitle: '爱你所爱！',
        lang: 'zh_CN',         // 'en', 'zh_CN', 'zh_TW', 'ja', 'ko'
        themeColor: {
-         hue: 250,         // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+         hue: 355,         // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
          fixed: false,     // Hide the theme color picker for visitors
        },
        banner: {
-         enable: false,
+         enable: true,
          src: 'assets/images/222.jpg',   // Relative to the /src directory. Relative to the /public directory if it starts with '/'
          position: 'center',      // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
          credit: {
@@ -124,6 +126,11 @@ lang: ''
          LinkPreset.Home,
          LinkPreset.Archive,
          LinkPreset.About,
+         {
+           name: '随机图',
+           url: 'https://pic.onani.cn',     // Internal links should not include the base path, as it is automatically added
+           external: true,                               // Show an external link icon and will open in a new tab
+         },
          {
            name: 'GitHub',
            url: 'https://github.com/saicaca/fuwari',     // Internal links should not include the base path, as it is automatically added
@@ -162,6 +169,7 @@ lang: ''
        name: 'CC BY-NC-SA 4.0',
        url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
      }
+     
      ```
 
 2. 清理多余文件。在根目录下的 `src/content/posts` 文件夹中会有一些示例文章，这些文章介绍了一些MarkDown语法和技巧，可以让你更快上手Hexo和fuwari，我们可以将其保存到别处
