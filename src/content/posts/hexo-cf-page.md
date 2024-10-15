@@ -2,7 +2,7 @@
 title: Hexo静态博客+Cloudflare Pages，只需一个域名，带你搭建博主同款博客！
 published: 2024-10-14
 description: 'Hexo是一个静态博客框架，Cloudflare Pages是一个托管静态网站的服务，将他俩结合即可得到一个快速安全无需托管的高效博客'
-image: './assets/images/2024-10-14-11-33-28-image.png'
+image: './assets/images/2024-10-15-09-04-45-image.png'
 tags: [Hexo, Cloudflare Pages]
 category: '运维'
 draft: false 
@@ -27,9 +27,7 @@ lang: ''
 
 ### 流程图
 
-本地部署Hexo，编写文章 -> 推送更改到远程Github仓库 -> Cloudflare Pages检测到仓库更新自动构建新的网站静态文件 -> 网站成功更改
-
-### 让我们开搞吧！
+本地部署Hexo，编写文章 -> 推送更改到远程Github仓库 -> Cloudflare Pages检测到仓库更新自动构建新的网站静态文件 -> 网站成功更改### 让我们开搞吧！
 
 #### 首先，我们来本地部署Hexo
 
