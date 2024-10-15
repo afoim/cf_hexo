@@ -80,7 +80,7 @@ export const profileConfig: ProfileConfig = {
     },
     {
       name: 'QQ',
-      icon: 'fa6-brands:envelope',
+      icon: 'fa6-solid:envelope',
       url: 'mailto:acofork@foxmail.com',
     },
   ],
