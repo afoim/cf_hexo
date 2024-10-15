@@ -77,7 +77,9 @@ lang: ''
    
    - bio：即个性签名，会显示在头像和名字下面
    
-   - `NavBarConfig` 为导航栏设置的超链接。`ProfileConfig` 为你的用户的超链接，分别如图![](assets/images/2024-10-15-08-55-47-image.png)
+   - `NavBarConfig` 为导航栏设置的超链接。`ProfileConfig` 为你的用户的超链接，分别如图![](assets/images/2024-10-15-17-49-30-image.png)
+   
+   - icon：你需要前往[Font Awesome](https://fontawesome.com/search)去搜索你想要的图标，比如QQ，则填写 `fa6-brands:qq` ，如图。Fuwari支持这几种类型：`fa6-brands`, `fa6-regular`, `fa6-solid`, `material-symbols`![](assets/images/2024-10-15-17-47-10-image.png)
    
    - 这里我附上我的 `config.ts` 
    
@@ -157,6 +159,16 @@ lang: ''
            icon: 'fa6-brands:github',
            url: 'https://github.com/afoim',
          },
+         {
+           name: 'QQ',
+           icon: 'fa6-brands:qq',
+           url: 'https://qm.qq.com/q/Uy9kmDXHYO',
+         },
+         {
+           name: 'QQ',
+           icon: 'fa6-solid:envelope',
+           url: 'mailto:acofork@foxmail.com',
+         },
        ],
      }
      
@@ -165,6 +177,7 @@ lang: ''
        name: 'CC BY-NC-SA 4.0',
        url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
      }
+     
      ```
 
 2. 清理多余文件。在根目录下的 `src/content/posts` 文件夹中会有一些示例文章，这些文章介绍了一些MarkDown语法和技巧，可以让你更快上手Fuwari和fuwari，我们可以将其保存到别处
