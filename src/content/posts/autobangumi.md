@@ -15,8 +15,6 @@ lang: 'zh_CN'
 2. 刮削软件（如Plex，飞牛影视设置定时搜索媒体库）
 3. 你只需要选番，然后等待下载和看就行了 ~~实际并非~~
 
-![](assets/images/8938ee430e5f74109c34c8c6d48e0e4f619cbeff.png)
-
 ### 安装qbittorrent
 
 > 用于下载番剧
@@ -26,6 +24,8 @@ lang: 'zh_CN'
 Windows：[SourceForge](https://sourceforge.net/projects/qbittorrent/files/qbittorrent-win32)
   Linux：`apt/yum install qbittorrent-nox`
   Docker：https://github.com/linuxserver/docker-qbittorrent
+
+![8938ee430e5f74109c34c8c6d48e0e4f619cbeff.webp](assets/images/29e0e4c26c15463ff692aabcee747950e2d029d3.webp)
 
 ### 安装AutoBangumi
 
