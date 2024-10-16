@@ -22,22 +22,14 @@ RaiDrive GUI支持Win，CLI支持Linux，并且界面引导友好
 [RaiDrive下载页](https://www.raidrive.com/download)
 ![2a73cbd377d121b8ff28b2bdae70e3d3_720](https://ipfs.crossbell.io/ipfs/QmcyopFzKrVQPcgNhXCmLweWEpTb4pgPVpDvrgeHLGoV5D?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
 支持Google Drive、OneDrive、AWS S3 对象存储、Cloudflare R2 对象存储、阿里云、谷歌云、腾讯云、甲骨文云、WebDAV、SFTP、FTP等**42种服务和协议**
-![image](https://ipfs.crossbell.io/ipfs/QmbdLf1RoG9pusoZrzVfmkAVkV2MrTuFPAuV8Q4LYQfRGP?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
 
-![image](https://ipfs.crossbell.io/ipfs/QmY2unL2NVkJC9Q7tmjshGh3LkcMDSG5bUtKnmgfz7ixeH?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
-
-![image](https://ipfs.crossbell.io/ipfs/QmUU136qwoZ7vacikPDiGsjn1guYm5s9Vnd4Kn7ZaqACBs?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
-
-![image](https://ipfs.crossbell.io/ipfs/Qma1J22qbUTGZMNmB2X646uydh7hDqvufEhRi7g4cdL2r3?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+![QmbdLf1RoG9pusoZrzVfmkAVkV2MrTuFPAuV8Q4LYQfRGP.png](assets/images/bb2268b816b95526ab110b7ad812fc7e475cc2e3.png)![](assets/images/39659022b0c994b0c2b96371f2e5a5190f499d88.png)![](assets/images/99aa435682ec5b9650474e2c46258eef2436214b.png)![](assets/images/500e9376d977c63db51f3e55c31b76260ff86e8b.png)
 
 ### 例图
 
-![88f17ff3e09f20b6f25b38af229b7e18](https://ipfs.crossbell.io/ipfs/QmNRSmUnUKdwEsrnaEL6H511DEzxjSkn2f8yjA5mcxqSmc?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+![](assets/images/d194b051ab76b5148fc6ba770fae34fe1182da23.png)![](assets/images/98be163801b426ec12d4af6550d1dc5c41c36c0c.png)
 
-![41916d376b1e5364176458e68f0d6f12](https://ipfs.crossbell.io/ipfs/QmcynoLdxVBtAfjfwKJNBdKb6GewpNMPRMGHCV8aDPX88V?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
-
-容量获取不准，但是不妨碍它牛逼😋
-![image](https://ipfs.crossbell.io/ipfs/QmRQqkfG1uD3pGMVTUXjKHXfiXmM9h2cp7sjkGcDDhK8W7?img-quality=75&img-format=auto&img-onerror=redirect&img-width=828)
+### 容量获取不准，但是不妨碍它牛逼😋
 
 ### 疑难解答
 

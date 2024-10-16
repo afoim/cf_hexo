@@ -12,24 +12,24 @@ lang: ''
 ### 吸引我的东西
 
 1. 影视刮削：飞快，薄纱Plex几条街。通过[AutoBangumi](/autobangumi)可以完美自动追番+刮削一条龙服务。偶尔会有不准，但可以手动匹配，数据源来自[TMDB](https://www.themoviedb.org/)和[IMDB](https://www.imdb.com/)
-   ![image](https://ipfs.crossbell.io/ipfs/QmbNXd4FJ8FM8mwkKxJNdBoNbvhawJ2HdSvW5tFUt3o4ub?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+   ![QmbNXd4FJ8FM8mwkKxJNdBoNbvhawJ2HdSvW5tFUt3o4ub.png](assets/images/f1bd7089efdf00097d5474ef967a62dcfca42e98.png)
 
 2. 相册：可以通过手机APP自动备份，支持仅备份图片，可以多用户使用，存储互不干扰，也可以设置要共享的图片
-   ![image](https://ipfs.crossbell.io/ipfs/QmeLJ7in4xcokPWUgkkSobDLUTrFrXep2o38qUXQ1njQR9?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+   ![QmeLJ7in4xcokPWUgkkSobDLUTrFrXep2o38qUXQ1njQR9.png](assets/images/2f9981f8397cc1278807ed28f8a2e15954868fec.png)
 
 ### 注意事项
 
 1. 飞牛NAS在安装的时候会叫你选择安装盘，然后会将安装盘的一部分空间（默认为64GB）作为系统分区，其余空间可用于创建存储空间（但是系统盘不能和别的盘组存储池，只能单独建存储池） 
-   ![image](https://ipfs.crossbell.io/ipfs/QmNfRbvHu1fuYoincACcP2MG4yV4pgRni3rb4Y9J7uw4FW?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+   ![QmNfRbvHu1fuYoincACcP2MG4yV4pgRni3rb4Y9J7uw4FW.png](assets/images/6403ef19d941abdc93d8c7da01364a8983c98109.png)
 
 2. 应用商店安装的软件需要先授予目录访问权限应用才能读取目录（无论是原生还是Docker应用）
-   ![image](https://ipfs.crossbell.io/ipfs/QmP4unAVra1zy7gkjEzSCYEDAJMMe1BVWPKoVyjYv8b9Ho?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+   ![QmP4unAVra1zy7gkjEzSCYEDAJMMe1BVWPKoVyjYv8b9Ho.png](assets/images/79af3b25d8b677b2718c953c0d431ead2f137e1d.png)
 
 3. 发行版为Debian 12。根目录为系统分区的空间，/vol1 为存储空间1的空间 /vol2 为存储空间2的空间。推荐使用[RaiDrive](https://onani.cn/RaiDrive)或[SSHFS](/SSHFS)挂载Linux目录到Windows
-   ![image](https://ipfs.crossbell.io/ipfs/QmbnSj1PgHCvJnBYadUjThnVDX4PsVK1ant6v34EasCSs3?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+   ![QmWMQHNpJUUPg9B1Hdw2zmwLx9q6bcS52nUFiB3P9iYvU9.png](assets/images/d4ec6f87893f4af5d7eedb2e2a19a784fd6c6f92.png)
 
 4. SSH需要自己开，账密为NAS管理员账密，建议登上之后改为仅密钥登录，参见：[设置 SSH 通过密钥登录](https://www.runoob.com/w3cnote/set-ssh-login-key.html)
-   ![image](https://ipfs.crossbell.io/ipfs/QmTk3va2NCbYTcVewVjuqjGx6MwMwiUnManrNwxvEq4SBR?img-quality=75&img-format=auto&img-onerror=redirect&img-width=3840)
+   ![QmTk3va2NCbYTcVewVjuqjGx6MwMwiUnManrNwxvEq4SBR.png](assets/images/9f92130465ab62e912b7404266febc7212e2125b.png)
 
 5. 各网卡测试
    

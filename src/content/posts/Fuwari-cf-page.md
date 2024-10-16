@@ -2,7 +2,7 @@
 title: Fuwari静态博客+Cloudflare Pages，只需一个域名，带你搭建博主同款博客！
 published: 2024-10-14
 description: 'Fuwari是一个静态博客框架，Cloudflare Pages是一个托管静态网站的服务，将他俩结合即可得到一个快速安全无需托管的高效博客'
-image: './assets/images/2024-10-15-09-04-45-image.png'
+image: './assets/images/2024-10-15-09-04-45-image.webp'
 tags: [Fuwari, Cloudflare Pages]
 category: '运维'
 draft: false 
@@ -37,7 +37,7 @@ lang: ''
 
 2. 避免有小废物不会Fork仓库，这里附上图片教程
 
-3. ![](assets/images/2024-10-14-12-15-44-image.png)![](assets/images/2024-10-14-12-17-03-image.png)
+3. ![](assets/images/2024-10-14-12-15-44-image.webp)![](assets/images/2024-10-14-12-17-03-image.webp)
 
 4. 然后将仓库克隆到本地：`git clone <你的仓库URL>`（推荐使用SSH，可以不用魔法来推送更改）
 
@@ -63,7 +63,7 @@ lang: ''
    
    - lang：博客显示语言。注释已经列出了一些常用的值，如：en, zh_CN, zh_TW, ja, ko
    
-   - themeColor：hue值则是你的博客主题色，可以在你的博客右上角的画板图标确定喜欢的颜色再填写![](assets/images/2024-10-15-09-16-30-image.png)
+   - themeColor：hue值则是你的博客主题色，可以在你的博客右上角的画板图标确定喜欢的颜色再填写![](assets/images/2024-10-15-09-16-30-image.webp)
    
    - banner：src：即banner图片，支持http/https URL
    
@@ -77,9 +77,9 @@ lang: ''
    
    - bio：即个性签名，会显示在头像和名字下面
    
-   - `NavBarConfig` 为导航栏设置的超链接。`ProfileConfig` 为你的用户的超链接，分别如图![](assets/images/2024-10-15-17-49-30-image.png)
+   - `NavBarConfig` 为导航栏设置的超链接。`ProfileConfig` 为你的用户的超链接，分别如图![](assets/images/2024-10-15-17-49-30-image.webp)
    
-   - icon：你需要前往[Font Awesome](https://fontawesome.com/search)去搜索你想要的图标，比如QQ，则填写 `fa6-brands:qq` ，如图。Fuwari支持这几种类型：`fa6-brands`, `fa6-regular`, `fa6-solid`, `material-symbols`![](assets/images/2024-10-15-17-47-10-image.png)
+   - icon：你需要前往[Font Awesome](https://fontawesome.com/search)去搜索你想要的图标，比如QQ，则填写 `fa6-brands:qq` ，如图。Fuwari支持这几种类型：`fa6-brands`, `fa6-regular`, `fa6-solid`, `material-symbols`![](assets/images/2024-10-15-17-47-10-image.webp)
    
    - 这里我附上我的 `config.ts` 
    
@@ -177,7 +177,6 @@ lang: ''
        name: 'CC BY-NC-SA 4.0',
        url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
      }
-     
      ```
 
 2. 清理多余文件。在根目录下的 `src/content/posts` 文件夹中会有一些示例文章，这些文章介绍了一些MarkDown语法和技巧，可以让你更快上手Fuwari和fuwari，我们可以将其保存到别处
@@ -209,7 +208,7 @@ lang: ''
    
    - description：文章描述，正常会显示在文章标题下面
    
-   - image：文章封面图（同目录需要写 `./` 如：`./assets/images/2024-10-14-11-33-28-image.png`）
+   - image：文章封面图（同目录需要写 `./` 如：`./assets/images/2024-10-14-11-33-28-image.webp`）
    
    - tag：文章标签
    
@@ -223,7 +222,7 @@ lang: ''
    
    - 依次点击：MarkText软件的左上角的三条杠 -> File -> Perferences -> 左侧的Image分类 -> 如图设置 -> 注意更改第一个选项为Copy开头的选项，将Perfer开关打开，然后上下两个文本框一个填写绝对路径一个填写相对路径
    
-   - ![](assets/images/2024-10-14-12-54-21-image.png)
+   - ![](assets/images/2024-10-14-12-54-21-image.webp)
    
    - 这样，当置入图片时，会往 `assets/images` 文件夹复制一份，然后通过`![1](assets/images/1.jpg)`写入MarkDown文件。这样网站就能成功读取到图片啦。而你只需要Ctrl+CV，其他操作MarkText都会自动处理
 
@@ -231,7 +230,7 @@ lang: ''
 
 #### 本地预览，然后发布到Github
 
-1. 当你认为你的文章已经写得差不多时，想要看看效果？请到项目根目录执行：`pnpm dev`，稍等片刻，你就可以本地预览你的博客啦![](assets/images/2024-10-14-13-03-44-image.png)
+1. 当你认为你的文章已经写得差不多时，想要看看效果？请到项目根目录执行：`pnpm dev`，稍等片刻，你就可以本地预览你的博客啦![](assets/images/2024-10-14-13-03-44-image.webp)
 
 2. 好！接下来我们需要使用Git将我们所做的更改发布到Github
    
@@ -245,14 +244,14 @@ lang: ''
    
    - 最后，让我们将本地更改提交到远程仓库：`git push`
 
-3. 此时，你的Github仓库应该已经有了新的提交![](assets/images/2024-10-14-13-10-12-image.png)
+3. 此时，你的Github仓库应该已经有了新的提交![](assets/images/2024-10-14-13-10-12-image.webp)
 
 #### 让Cloudflare连接上Github，使用Pages服务展示你的博客（FREE！）
 
-1. 前往Cloudflare的 Workers 和 Pages 页面，创建一个新Pages![](assets/images/2024-10-14-13-14-28-image.png)
+1. 前往Cloudflare的 Workers 和 Pages 页面，创建一个新Pages![](assets/images/2024-10-14-13-14-28-image.webp)
 
-2. 然后选择连接Git存储库，连接你的Github，随后设置构建命令：`pnpm build`  ，然后设置构建输出目录：`dist` ，如图![](assets/images/2024-10-14-13-16-15-image.png)
+2. 然后选择连接Git存储库，连接你的Github，随后设置构建命令：`pnpm build`  ，然后设置构建输出目录：`dist` ，如图![](assets/images/2024-10-14-13-16-15-image.webp)
 
-3. 绑定自定义域，访问自定义域即可访问你的博客！![](assets/images/2024-10-14-13-17-00-image.png)
+3. 绑定自定义域，访问自定义域即可访问你的博客！![](assets/images/2024-10-14-13-17-00-image.webp)
 
 4. 随后，你只需要在本地编写文章，然后[使用Git将更改推送到远程仓库](#本地预览然后发布到github)，Cloudflare就会自动部署，更新你的博客！
