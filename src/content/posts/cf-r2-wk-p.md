@@ -21,7 +21,9 @@ lang: ''
 
 R2 实际上是一个对象存储。Cloudflare 提供 10G 的免费存储和每月 1000 万次的免费访问
 
-1. 进入[Cloudflare 仪表盘](https://dash.cloudflare.com/)，进入 R2 页面，如图![QmU7u2JHUcevyHnwsCdAZfs7X7Fcdh3KJhn6eoy24Q5dGC.png](assets/images/0ffb86d36ab0f3fcc24ef7b3d64c4bc72b6b53e7.png)
+1. 进入[Cloudflare 仪表盘](https://dash.cloudflare.com/)，进入 R2 页面，如图
+   
+   ![QmU7u2JHUcevyHnwsCdAZfs7X7Fcdh3KJhn6eoy24Q5dGC.png](assets/images/0ffb86d36ab0f3fcc24ef7b3d64c4bc72b6b53e7.png)
 
 2. 选择创建存储桶![QmX3eCaCVEgE8AN29D9t2VpQ5t5SrZGKb8EcZv9oKpCqf2.png](assets/images/26d3b3e26b9e2f641a2eea98c2ddb8891a0b7f6a.png)
 
@@ -72,7 +74,7 @@ R2 实际上是一个对象存储。Cloudflare 提供 10G 的免费存储和每�
 
 12. 选择添加，如图![QmRDVxt8WbrVkHavgFNXj3qC86ysw6sSZhPy3Uf2ixKp2E.png](assets/images/2807d1dbc07fed008c8177cd3b2b89bfd03cc8be.png)
 
-13. 详细配置如图。挂载路径即 AList 展示路径，推荐使用`/R2/你的存储桶名字`，地区为`auto`![](assets/images/2024-10-16-11-37-53-image.png)回到主页，如图![QmSnR9Ptrssx4nqk9qCvhFUNKQyQqJiN7GRscwoj4Dczgj.png](assets/images/e7bfec8dd9765182aa07eb7967d8150bf76113f2.png)
+13. 详细配置如图。挂载路径即 AList 展示路径，推荐使用`/R2/你的存储桶名字`，地区为`auto`![](assets/images/2024-10-16-11-37-53-image.png)回到主页，如图![QmSnR9Ptrssx4nqk9qCvhFUNKQyQqJiN7GRscwoj4Dczgj.png](assets/images/65265d29e91f146ecbe3d92218eb9af49eac1c8b.png)
 
 14. 尝试上传文件，如图![QmPqFsmZNNnh4jNyLS7X3h8Zr6ZCVqTqGVwTxmPDdbmrGW.png](assets/images/061c995a66c34ebc341f692d4eb82d5657d791d6.png)
 
