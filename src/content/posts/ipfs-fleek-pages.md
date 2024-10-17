@@ -17,7 +17,7 @@ lang: ''
 
 ### 使用IPFS能做什么？
 
-当你连接到IPFS网络后，IPFS会自动将你的设备作为一个本地IPFS节点并且寻找其他IPFS节点，你将能够帮助其他用户建立连接、提供文件。同时你也可以将你的文件上传到你的IPFS节点，等待分发，让网络上的其他用户可以访问你的文件。在IPFS网络中，访问文件通过IPFS网关，如：`https://ipfs.io/ipfs/` + `CID（文件哈希）` 实现访问。比如：https://ipfs.crossbell.io/ipfs/bafybeiefu7zj2sgfuo2q5bdfl5epn4yj7hv2qq7uvn337ybg6dv26ot3ma
+当你连接到IPFS网络后，IPFS会自动将你的设备作为一个本地IPFS节点并且寻找其他IPFS节点，你将能够帮助其他用户建立连接、提供文件。同时你也可以将你的文件上传到你的IPFS节点，等待分发，让网络上的其他用户可以访问你的文件。在IPFS网络中，访问文件通过IPFS网关，如：`https://ipfs.io/ipfs/` + `CID（文件哈希）` 实现访问。比如： https://ipfs.crossbell.io/ipfs/bafybeifbn36zmdb37ov6id3toy6bve47264hjk2yob6rm4bhw7ooawncf4
 
 （这里使用 `ipfs.crossbell.io` 这个CrossBell托管的IPFS网关来规避GFW封禁）
 
@@ -82,7 +82,7 @@ lang: ''
 
 #### 拓展一下，我们还可以通过IPFS技术做什么？
 
-1. 创建一个巨大的图床，已经投入使用，参见：https://pic.onani.cn（原理：请求https://ipfs-pic.onani.cn，获取图片列表，随机选择使用JS展示）![](assets/images/2024-10-17-11-34-44-image.png)
+1. 创建一个巨大的图床，已经投入使用，参见： https://pic.onani.cn （原理：请求 https://ipfs-pic.onani.cn ，获取图片列表，随机选择使用JS展示）![](assets/images/2024-10-17-11-34-44-image.png)
 
 2. 无需再自托管任何图片，已经投入使用，本博客所有图片都使用IPFS存储
 
