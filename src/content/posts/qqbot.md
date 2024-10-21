@@ -23,7 +23,7 @@ lang: 'zh_CN'
 
 3. 它会跟你说没有配置文件，不用管，一路回车（你要会改就改）
 
-```
+```json
 {
     "Logging": {
         "LogLevel": {
@@ -80,7 +80,7 @@ lang: 'zh_CN'
 
 5. 装 nb-cli：`pipx install nb-cli`
 
-6. **如果找不到 nb 命令：** 对于 root 用户，你可以编辑 /root/.bashrc 或 /root/.profile（如果你使用的是 Bash）： `nano /root/.bashrc` 添加以下行： `export PATH="$HOME/.local/bin:$PATH"` 保存并重新加载配置： `source /root/.bashrc`
+6. **如果找不到 nb 命令：** 对于 root 用户，你可以编辑 `/root/.bashrc` 或 `/root/.profile`（如果你使用的是 Bash）： `nano /root/.bashrc` 添加以下行： `export PATH="$HOME/.local/bin:$PATH"` 保存并重新加载配置： `source /root/.bashrc`
 
 7. 装 nb bootstrap：`nb self install nb-cli-plugin-bootstrap`
 

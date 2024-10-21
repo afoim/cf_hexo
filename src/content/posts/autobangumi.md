@@ -35,7 +35,7 @@ Windows：[SourceForge](https://sourceforge.net/projects/qbittorrent/files/qbitt
 
 2. 找一个你喜欢的文件夹创建`docker-compose.yaml` ，并写入内容：
 
-```
+```yaml
 services:
 AutoBangumi:
   image: "ghcr.io/estrellaxd/auto_bangumi:latest"
@@ -87,15 +87,13 @@ AutoBangumi:
 
 注意！你只需要确保番剧名正确就可以了！子目录可以通过后面的脚本自动重命名！如果你不确定番剧名请前往TMDB搜索：[The Movie Database (TMDB) ](themoviedb.org)
 
-一级目录（qb 设置的下载目录）：不需要重命名
+> 一级目录（qb 设置的下载目录）：不需要重命名
 
-二级目录（番剧名，必须正确）：总之就是非常可爱
+> 二级目录（番剧名，必须正确）：总之就是非常可爱
 
-三级目录：（番剧的哪一季）：Season 1
+> 三级目录：（番剧的哪一季）：Season 1
 
-四级目录：（番剧的哪一季的哪一集）：S01E01.MP4
-
----
+> 四级目录：（番剧的哪一季的哪一集）：S01E01.MP4
 
 1. ~~前往Episode-ReName，克隆仓库~~（已被删库，可尝试[Episode-ReName.zip | Onani-AList](https://alist.onani.cn/Episode-ReName.zip) )
 
