@@ -1,0 +1,1254 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>二叉树树的博客</title><description>爱你所爱！</description><link>https://onani.cn/</link><language>zh_CN</language><item><title>让我们来探讨一下如何绕过GFW</title><link>https://onani.cn/posts/bypass-gfw/</link><guid isPermaLink="true">https://onani.cn/posts/bypass-gfw/</guid><description>GFW俗称中国网络国家防火墙，它运用多种技术阻断境内对境外某些网站的访问，比如谷歌、Discord。但对于某些阻断方式，通过一些手段，我们可以绕过GFW来进行访问</description><pubDate>Mon, 21 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;首先，我们要知道GFW是如何封锁我们的流量的&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;IP黑洞：目前无解，但仅对部分服务黑洞，如谷歌系（谷歌、推特、YouTube等）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DNS污染：为域名返回一个假的IP。使用hosts文件强制指定域名对应ip或者使用加密的DNS（DoH、DNS 签名等）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;HTTP劫持：因为流量不是加密的，GFW作为天然的中间人可以直接进行篡改（如：重定向到404页面、劫持到反诈页面等）。可以使用HTTPS连接规避，但你可能会遇到SNI阻断&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SNI阻断：在客户端与服务器建立加密连接前，客户端会发送 &lt;code&gt;Client Hello&lt;/code&gt; 报文，而这个报文是明文，并且一般都会携带 &lt;code&gt;server_name&lt;/code&gt; ，GFW可以知道你要访问哪个网站，对不在白名单（如：discord.com）的域名进行阻断。因为 &lt;code&gt;server_name&lt;/code&gt; 实际上是一个扩展，并不强制，你可以不发送它来规避SNI阻断&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;那么，让我们分析一下GFW对于不同网站的封锁情况&lt;/h3&gt;
+&lt;p&gt;我们使用WireShark进行抓包&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;首先尝试访问 &lt;code&gt;www.baidu.com&lt;/code&gt; 这是一个没有被GFW封锁的域名&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;我们先ping一下&lt;img src=&quot;assets/images/2024-10-21-20-16-48-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;得到ip： &lt;code&gt;2408:873d:22:18ac:0:ff:b021:1393&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过Hosts强制绑定&lt;img src=&quot;assets/images/2024-10-21-20-18-10-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过WireShark进行抓包，可以看到，客户端发送的 &lt;code&gt;Client Hello&lt;/code&gt; 可以清晰地看到 &lt;code&gt;Server Name&lt;/code&gt; 字段，并且也能正常收到 &lt;code&gt;Server Hello&lt;/code&gt; 然后双方便开始通信&lt;img src=&quot;assets/images/2024-10-21-20-24-03-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;查看浏览器，网站正常访问&lt;img src=&quot;assets/images/2024-10-21-20-35-29-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;让我们试试访问 &lt;code&gt;discord.com&lt;/code&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;我们先ping一下，可以发现，域名和解析到的IP均不通&lt;img src=&quot;assets/images/2024-10-21-20-27-57-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;此时我们尝试使用 &lt;code&gt;itdog.cn&lt;/code&gt; 进行v4 ping，并且依次对解析出的域名进行ping&lt;img src=&quot;assets/images/2024-10-21-20-28-51-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可见，第一个IP通&lt;img src=&quot;assets/images/2024-10-21-20-29-40-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;强制绑定Hosts，尝试抓包&lt;img src=&quot;assets/images/2024-10-21-20-35-58-image.png&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;assets/images/2024-10-21-20-31-49-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可见，在通过强制Hosts绑定后，在客户端发送 &lt;code&gt;Client Hello&lt;/code&gt; 后被GFW检测到&lt;code&gt;Server Name&lt;/code&gt; 字段，然后GFW向客户端发送一个 &lt;code&gt;RST&lt;/code&gt; 报文，即要求重置客户端连接。在客户端侧，则会收到 &lt;code&gt;ERR_CONNECTION_RESET&lt;/code&gt; 即：连接已重置。用户无法访问网页。&lt;img src=&quot;assets/images/2024-10-21-20-33-23-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;继续，尝试发送空 &lt;code&gt;Server Name&lt;/code&gt; 报文&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-21-20-41-37-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-21-20-41-54-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;成功访问。在WireShark中并未发现 &lt;code&gt;Server Name&lt;/code&gt; 字段&lt;/p&gt;
+&lt;h3&gt;杀手锏，tcpioneer&lt;/h3&gt;
+&lt;p&gt;它通过魔改TCP数据包使得GFW无法检测，并且WireShark也无法抓取到&lt;code&gt;Client Hello&lt;/code&gt;报文，但是仍然能建立连接，即服务端发送&lt;code&gt;Server Hello&lt;/code&gt;&lt;img src=&quot;assets/images/2024-10-21-20-46-44-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>使用基于IPFS的Fleek部署静态网站、托管图床、部署服务</title><link>https://onani.cn/posts/ipfs-fleek-pages/</link><guid isPermaLink="true">https://onani.cn/posts/ipfs-fleek-pages/</guid><description>IPFS是一个多节点的文件托管系统，你可以在上面共享文件、发布网站、而Fleek自动化了这个过程，并且可以链接你的Git存储库</description><pubDate>Thu, 17 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;什么是IPFS？&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;IPFS，是点到点的超媒体协议，它让网络更快、更安全、更开放。说简单一点，它就是一个去中心化互联网。说技术一点，它是一个基于分布式哈希表DHT进行内容寻址的，基于git模型版本管理的，基于默克尔对象关联的，基于点对点技术的，基于全球化命名空间IPNS的，基于各种技术的，一种分布式文件系统。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;用人话说，你可以把它看成一个共享网盘，你可以尝试下载&lt;a href=&quot;https://github.com/ipfs/ipfs-desktop&quot;&gt;IPFS - Desktop（适用于有图形界面的系统）&lt;/a&gt;或&lt;a href=&quot;https://github.com/ipfs/kubo&quot;&gt;kubo - ipfs（适用于CLI）&lt;/a&gt;。然后启动IPFS，你的设备将成为IPFS网络中的一个节点，如图&lt;img src=&quot;assets/images/2024-10-17-10-47-08-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;使用IPFS能做什么？&lt;/h3&gt;
+&lt;p&gt;当你连接到IPFS网络后，IPFS会自动将你的设备作为一个本地IPFS节点并且寻找其他IPFS节点，你将能够帮助其他用户建立连接、提供文件。同时你也可以将你的文件上传到你的IPFS节点，等待分发，让网络上的其他用户可以访问你的文件。在IPFS网络中，访问文件通过IPFS网关，如：&lt;code&gt;https://ipfs.io/ipfs/&lt;/code&gt; + &lt;code&gt;CID（文件哈希）&lt;/code&gt; 实现访问。比如： https://ipfs.crossbell.io/ipfs/bafybeifbn36zmdb37ov6id3toy6bve47264hjk2yob6rm4bhw7ooawncf4&lt;/p&gt;
+&lt;p&gt;（这里使用 &lt;code&gt;ipfs.crossbell.io&lt;/code&gt; 这个CrossBell托管的IPFS网关来规避GFW封禁）&lt;/p&gt;
+&lt;h3&gt;这项技术真的有这么理想吗？&lt;/h3&gt;
+&lt;p&gt;这项技术确实很理想，但是实际应用下来会遇到以下问题&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;通过本地IPFS节点上传的文件迟迟无法通过IPFS网关+CID实现访问&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现的节点太少&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可能会大量占用你的带宽&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这些问题大部分原因都是因为这个网络太过于庞大，而单个IPFS节点的权重很低，尽管IPFS的分发一般在几小时内可以完成。但对于个人来说，我们应当寻找一些服务商帮我们完成这些需求，它们往往在IPFS网络中的权重更大，进行文件更新的效率也很高，同时也提供一些扩展服务，比如自动化Git部署。而这篇文章使用的则是&lt;strong&gt;Fleek&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;关于Fleek&lt;/h3&gt;
+&lt;p&gt;你可以简单理解为它权重很大，有很多的IPFS节点，经由Fleek上传到IPFS网络上的文件可以在几秒内完成广播，并且支持连接Git存储库部署项目和绑定你的域名&lt;/p&gt;
+&lt;h3&gt;Fleek是否值得信赖？&lt;/h3&gt;
+&lt;p&gt;本人仅接触此服务2天。观察到Fleek在成功部署网站后提供了三类访问方式&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;xxx-xxx.fleek.app&lt;/code&gt;：这个域名使用了Cloudflare CDN，实测解析IP的数量为2，不建议使用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-17-11-01-49-image.png&quot; alt=&quot;&quot; /&gt;：这种方法是原生的IPFS访问方式。通过IPFS网关+CID来访问。但由于CID为哈希值，当你的网站改动后你的CID会发生变化&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;绑定自定义域名来访问，这将会使用亚马逊的CDN并且自动映射CID，实测解析IP数量超过30，并且速度很快&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!WARNING]
+注意，任何使用HTTP协议的类ipfs技术都需要一个中心化服务器代理访问IPFS网络。只有当访问者连接上IPFS网络后才会使用去中心化的连接方式）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-17-11-07-40-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;尽管显示了IPFS的文件浏览界面，但实际上这个页面是由HTTP请求到亚马逊 CDN反代IPFS网络实现的，实际上仍为中心化网络&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-17-11-08-44-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当你的设备已经连上IPFS网络后，所有流量将使用P2P（去中心化），所以你看到的访问地址实际上是本机地址&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;梳理一下思路，我们可以用Fleek做到什么&lt;/h3&gt;
+&lt;p&gt;让Fleek连接你的Git存储库，通过构建命令构建静态网站，并发布到IPFS，同时兼容HTTP访问&lt;/p&gt;
+&lt;h4&gt;正式开始&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;前往fleek.xyz，通过MetaMask登录&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;连接你的Git存储库，输入构建命令等相关信息&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;部署网站&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;绑定域名&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;最终访问&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;效果图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-17-11-31-33-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h4&gt;拓展一下，我们还可以通过IPFS技术做什么？&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个巨大的图床，已经投入使用，参见： https://pic.onani.cn （原理：请求 https://ipfs-pic.onani.cn ，获取图片列表，随机选择使用JS展示）&lt;img src=&quot;assets/images/2024-10-17-11-34-44-image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;无需再自托管任何图片，已经投入使用，本博客所有图片都使用IPFS存储&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;理论上，你可以将任何占用存储的服务上传到IPFS，实现存算分离&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>傻瓜式AI翻唱软件Replay！选歌！选模型！然后CREATE SONG！</title><link>https://onani.cn/posts/replay/</link><guid isPermaLink="true">https://onani.cn/posts/replay/</guid><description>Replay是一个自动化的AI翻唱软件，用户仅需要提供想要翻唱的歌和RVC模型，Replay会自动进行人声分离，并生成AI翻唱音频，对于新手来说十分友好</description><pubDate>Tue, 15 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;AI翻唱！仅需两步！&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;前往&lt;a href=&quot;https://www.tryreplay.io/&quot;&gt;Replay | Free AI Voice Cloning and Stemming using RVC Models (tryreplay.io)&lt;/a&gt;下载Replay&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;打开Replay，首先根据引导下载数据包（约11G）。然后根据图片操作，选择歌曲和模型，最后点击 &lt;code&gt;CREATE SONG&lt;/code&gt; 即可！&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;assets/images/2024-10-15-16-39-49-image.webp&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;assets/images/2024-10-15-16-40-07-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>教你把AList的前端部署到CF Pages！让你的AList秒加载！</title><link>https://onani.cn/posts/alist-web-for-cf-page/</link><guid isPermaLink="true">https://onani.cn/posts/alist-web-for-cf-page/</guid><description>将AList Web部署到CF Pages可以显著提升访问者的浏览体验，因为静态资源都在CF的边缘节点，而后端使用API交互，而不是由源服务器路由所有流量，既能减轻源服务器的负载，又能使用CF Pages的不回源优势，一箭双雕</description><pubDate>Tue, 15 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;前情提要&lt;a href=&quot;https://afo.im/shen-me-Cloudflare-dai-li-AList-tai-man--jiao-ni-bu-shu-qian-duan-dao-Pages-ju-jue-hui-yuan-#user-content-%E5%89%8D%E6%83%85%E6%8F%90%E8%A6%81&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;本教程&lt;strong&gt;不是 AList 的无服务器部署&lt;/strong&gt;，仅将前端页面部署到 Cloudflare Pages，这样用户就能很快从 cf 的边缘节点拉取前端文件，而不用 cf 回源，提高浏览体验，后端仍然需要一台开放到公网的服务器部署 AList（无公网服务器可使用 Cloudflare Tunnels）&lt;/p&gt;
+&lt;h3&gt;首先，保证你的后端服务器支持v4v6双栈访问&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;使用Cloudflare Tunnel，套cf&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;分别设置A和AAAA解析，麻烦，如果你的IP很快，那其实可以不用前后端分离，暴露源站的前后端分离也不能避免被DDoS，因为你的源站会在HTTP报文中暴露&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;然后，开始正式将AList前端部署到Cloudflare Pages&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Fork仓库：&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;alist-org/alist-web&quot;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;更改项目根目录的&lt;code&gt;env.production&lt;/code&gt;文件为你的后端服务器地址&lt;br /&gt;
+&lt;img src=&quot;assets/images/6f2871ca5d35e1e974d89611835f3a2c7fd205e7.png&quot; alt=&quot;QmduQJq3TydzvLzBn47zLxp2MR1iD2sxm67EzFUFuEBvQa.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将仓库克隆到本地，需要安装&lt;a href=&quot;https://git-scm.com/&quot;&gt;Git&lt;/a&gt;：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;使用SSH（需要持有你的Github SSH私钥）：
+git clone git@github.com:你的用户名/你Fork的仓库
+
+使用HTTPS（Not Use Magic有概率SSL握手失败）：
+git clone git@github.com:你的用户名/你Fork的仓库
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;下载汉化包：&lt;a href=&quot;https://alist.onani.cn/guest/alist_Zh-CN&quot;&gt;AcoFork 的网盘&lt;/a&gt;或&lt;a href=&quot;https://crowdin.com/project/alist/zh-CN&quot;&gt;Crowdin - 需要登录&lt;/a&gt;&lt;br /&gt;
+&lt;img src=&quot;assets/images/68d31e9797edfc3c1d8a72386ebf3a643d117ce6.png&quot; alt=&quot;QmXVpMc7BqbXv9EaAbeptsrnhYLinvQQsu1btBE3VvDixa.png&quot; /&gt;&lt;/li&gt;
+&lt;li&gt;解压，将&lt;code&gt;alist (zh-CN)\src\lang&lt;/code&gt;里面的&lt;code&gt;Zh-CN&lt;/code&gt;文件夹复制到仓库下&lt;code&gt;src/lang&lt;/code&gt;下&lt;/li&gt;
+&lt;li&gt;编辑根目录的&lt;code&gt;.gitignore&lt;/code&gt;，添加一行&lt;code&gt;!/src/lang/zh-CN/&lt;/code&gt;确保文件不被忽略&lt;/li&gt;
+&lt;li&gt;下载&lt;a href=&quot;https://nodejs.org/zh-cn&quot;&gt;Nodejs&lt;/a&gt;。在根目录打开终端，生成中文需要的文件：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;安装cnpm：
+npm install -g cnpm --registry=https://registry.npmmirror.com
+
+安装依赖：
+cnpm install --legacy-peer-deps
+
+生成中文需要的文件：
+node .\scripts\i18n.mjs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;将更改提交到暂存区并提交到远程仓库，在根目录打开终端&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;git add .   //将更改提交到暂存区
+git commit -m 添加中文   //发布提交
+git push -f   //强制将更改提交到远程仓库
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;进入&lt;a href=&quot;https://dash.cloudflare.com/&quot;&gt;Cloudflare 仪表盘&lt;/a&gt;，进入 Workers 和 Pages 页面&lt;br /&gt;
+&lt;img src=&quot;assets/images/49ccd51771082fdc94eecb270caf987d257cd987.png&quot; alt=&quot;QmW5UaUap8T2R37u5dzmKGLmUgk4qKnSMFwHBVHqvVbkVA.png&quot; /&gt;&lt;/li&gt;
+&lt;li&gt;创建一个 Pages，选择连接 Git 存储库&lt;br /&gt;
+&lt;img src=&quot;assets/images/9c4b9ff38d3c8810007ffe33c1a0f98cdd84b92e.png&quot; alt=&quot;QmZXerKv9PVxxscAe4w4LEfAaKfiScPQEKh1UroXnCeAUr.png&quot; /&gt;&lt;/li&gt;
+&lt;li&gt;选择你的存储库，开始设置&lt;br /&gt;
+&lt;img src=&quot;assets/images/fb97b5148c3811590609a0b85c6c1ee3c451853d.png&quot; alt=&quot;QmNdSGQrJtoqDnBx8pgDrtcfmUUfVBS9xdrN4xLgyPjyXE.png&quot; /&gt;&lt;/li&gt;
+&lt;li&gt;构建命令输入：&lt;code&gt;pnpm install &amp;amp;&amp;amp; pnpm build&lt;/code&gt;，构建输出目录选择&lt;code&gt;/dist&lt;/code&gt;&lt;br /&gt;
+&lt;img src=&quot;assets/images/c4300a94ccb16fe1383c721cbc83d1a71420e340.png&quot; alt=&quot;QmbhPdbE8f1zLKvWA6aEGJtZhmecRMVZiQbx6Zx1Lecp7J.png&quot; /&gt;&lt;/li&gt;
+&lt;li&gt;等待 Cloudflare 构建结束，为 Pages 绑定自定义域&lt;br /&gt;
+&lt;img src=&quot;assets/images/d27136b31d759898fe06041f12e7a07f07bd06b0.png&quot; alt=&quot;QmTMphu61uUF9XefBAVDVf19Jm1vLVUhhXQ9PXABy7hUpK.png&quot; /&gt;&lt;/li&gt;
+&lt;li&gt;访问自定义域，查看 AList 是否正常&lt;br /&gt;
+&lt;img src=&quot;assets/images/345df496620a9d3faf0eceeb773813bc9ac98375.png&quot; alt=&quot;QmT8GLcaxtabhifKNL8kczEtozmNvdyhzJ823RfBrcFdpm.png&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;定制 AList&lt;a href=&quot;https://afo.im/shen-me-Cloudflare-dai-li-AList-tai-man--jiao-ni-bu-shu-qian-duan-dao-Pages-ju-jue-hui-yuan-#user-content-%E5%AE%9A%E5%88%B6-alist&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我们都知道 AList 支持自定义头部和内容，但是因为 Cloudflare Pages 是一个静态页面，所以我们采用硬编码方式，直接将需要自定义的内容写入仓库根目录的&lt;code&gt;index.html&lt;/code&gt;&lt;br /&gt;
+&lt;img src=&quot;assets/images/c3ff113558b368da9a7aeb70f70b978f49d0eb7a.png&quot; alt=&quot;Qmd47pgFsyh28NjhkLiCPPbf7iasXMWvAvZDupH8QspG64.png&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;编辑根目录的&lt;code&gt;index.html&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将更改提交到暂存区并提交到远程仓库，在根目录打开终端&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;git add .   //将更改提交到暂存区
+git commit -m 你的提交摘要   //发布提交
+git push -f   //强制将更改提交到远程仓库
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;Cloudflare Pages 会自动重新构建，等待新网页构建完成即可&lt;br /&gt;
+&lt;img src=&quot;assets/images/863e5bb3ef65ec2a0af03303dd3afe13fb8dd8d4.png&quot; alt=&quot;QmNZemsDHz5QLxW3V2eANghmVkfBccEpe5vMAWUCLik4o6.png&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>Fuwari静态博客+Cloudflare Pages，只需一个域名，带你搭建博主同款博客！</title><link>https://onani.cn/posts/fuwari-cf-page/</link><guid isPermaLink="true">https://onani.cn/posts/fuwari-cf-page/</guid><description>Fuwari是一个静态博客框架，Cloudflare Pages是一个托管静态网站的服务，将他俩结合即可得到一个快速安全无需托管的高效博客</description><pubDate>Mon, 14 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;你需要准备的东西&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;一个牛逼的脑子，支持并行运算至少两个单位以上的事件。遇到问题先思考，想不通就搜索，搜索不到就去和AI调情，不要上来就问问问&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://git-scm.com/downloads&quot;&gt;Git - Downloads (git-scm.com)&lt;/a&gt;：最牛逼的版本控制器，这里用于对Github进行操作，当然，你也可以尝试使用&lt;a href=&quot;https://github.com/apps/desktop&quot;&gt;GitHub Desktop | Simple collaboration from your desktop&lt;/a&gt;但就我而言，这玩意更难用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://nodejs.org/en&quot;&gt;Node.js — Run JavaScript Everywhere (nodejs.org)&lt;/a&gt;：Fuwari基于Node.js，你需要安装这个来搭建博客&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个&lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;账号：用于创建一个代码仓库存放Fuwari文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个&lt;a href=&quot;https://cloudflare.com&quot;&gt;Cloudflare&lt;/a&gt;账号：用于创建一个Pages并且绑定域名支持访问&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.marktext.cc&quot;&gt;MarkText&lt;/a&gt;：这是一个可视化MarkDown编辑器，因为Fuwari的每一篇文章/页面都是MarkDown，所以需要一个好用的编辑器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;你得会用MarkDown语法来编写文章，如果你不会可以参见：&lt;a href=&quot;https://markdown.com.cn/basic-syntax/&quot;&gt;Markdown 基本语法 | Markdown 官方教程&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;流程图&lt;/h3&gt;
+&lt;p&gt;本地部署Fuwari，编写文章 -&amp;gt; 推送更改到远程Github仓库 -&amp;gt; Cloudflare Pages检测到仓库更新自动构建新的网站静态文件 -&amp;gt; 网站成功更改&lt;/p&gt;
+&lt;h3&gt;让我们开搞吧！&lt;/h3&gt;
+&lt;h4&gt;首先，我们来本地部署Fuwari&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Fork仓库：&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;saicaca/fuwari&quot;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;避免有小废物不会Fork仓库，这里附上图片教程&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-14-12-15-44-image.webp&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;assets/images/2024-10-14-12-17-03-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后将仓库克隆到本地：&lt;code&gt;git clone &amp;lt;你的仓库URL&amp;gt;&lt;/code&gt;（推荐使用SSH，可以不用魔法来推送更改）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;首先，全局安装pnpm：&lt;code&gt;npm install -g pnpm&lt;/code&gt;（如果npm国内拉取过慢，请尝试cnpm：&lt;a href=&quot;https://npmmirror.com/&quot;&gt;npmmirror 镜像站&lt;/a&gt;）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后在项目根目录安装依赖：&lt;code&gt;pnpm install&lt;/code&gt;  和 &lt;code&gt;pnpm add sharp&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;至此，你成功在本地部署了Fuwari&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!TIP]&lt;/p&gt;
+&lt;p&gt;你也可以使用创建一个新的空仓库然后手动上传文件，并且可以将仓库可见性设为：Private&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;改写Fuwari的基本信息并且清理多余文件&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;刚创建的Fuwari可能带有一些示例的博主名，ICON，URL，介绍和示例文章，为了让用户知道这是你的博客，我们需要一一改写&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;在根目录下的 &lt;code&gt;src&lt;/code&gt; 文件夹中，你可以找到 &lt;code&gt;config.ts&lt;/code&gt; 我们来开始改写&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;title：你的博客主标题&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;subtitle：你的博客副标题。可选，在首页会显示为“主标题 - 副标题”&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;lang：博客显示语言。注释已经列出了一些常用的值，如：en, zh_CN, zh_TW, ja, ko&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;themeColor：hue值则是你的博客主题色，可以在你的博客右上角的画板图标确定喜欢的颜色再填写&lt;img src=&quot;assets/images/2024-10-15-09-16-30-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;banner：src：即banner图片，支持http/https URL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;favicon：src：即网站图标，支持http/https URL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;links：即友情链接，这些链接在导航栏上&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;avatar：即你的头像&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;name：即你的名字&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;bio：即个性签名，会显示在头像和名字下面&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;NavBarConfig&lt;/code&gt; 为导航栏设置的超链接。&lt;code&gt;ProfileConfig&lt;/code&gt; 为你的用户的超链接，分别如图&lt;img src=&quot;assets/images/2024-10-15-17-49-30-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;icon：你需要前往&lt;a href=&quot;https://fontawesome.com/search&quot;&gt;Font Awesome&lt;/a&gt;去搜索你想要的图标，比如QQ，则填写 &lt;code&gt;fa6-brands:qq&lt;/code&gt; ，如图。Fuwari支持这几种类型：&lt;code&gt;fa6-brands&lt;/code&gt;, &lt;code&gt;fa6-regular&lt;/code&gt;, &lt;code&gt;fa6-solid&lt;/code&gt;, &lt;code&gt;material-symbols&lt;/code&gt;&lt;img src=&quot;assets/images/2024-10-15-17-47-10-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;这里我附上我的 &lt;code&gt;config.ts&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;pre&gt;&lt;code&gt;import type {
+  LicenseConfig,
+  NavBarConfig,
+  ProfileConfig,
+  SiteConfig,
+} from &apos;./types/config&apos;
+import { LinkPreset } from &apos;./types/config&apos;
+
+export const siteConfig: SiteConfig = {
+  title: &apos;二叉树树的博客&apos;,
+  subtitle: &apos;爱你所爱！&apos;,
+  lang: &apos;zh_CN&apos;,         // &apos;en&apos;, &apos;zh_CN&apos;, &apos;zh_TW&apos;, &apos;ja&apos;, &apos;ko&apos;
+  themeColor: {
+    hue: 355,         // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+    fixed: false,     // Hide the theme color picker for visitors
+  },
+  banner: {
+    enable: true,
+    src: &apos;assets/images/222.jpg&apos;,   // Relative to the /src directory. Relative to the /public directory if it starts with &apos;/&apos;
+    position: &apos;center&apos;,      // Equivalent to object-position, only supports &apos;top&apos;, &apos;center&apos;, &apos;bottom&apos;. &apos;center&apos; by default
+    credit: {
+      enable: false,         // Display the credit text of the banner image
+      text: &apos;&apos;,              // Credit text to be displayed
+      url: &apos;&apos;                // (Optional) URL link to the original artwork or artist&apos;s page
+    }
+  },
+  favicon: [    // Leave this array empty to use the default favicon
+     {
+       src: &apos;https://q2.qlogo.cn/headimg_dl?dst_uin=2973517380&amp;amp;spec=5&apos;,    // Path of the favicon, relative to the /public directory
+       //theme: &apos;light&apos;,              // (Optional) Either &apos;light&apos; or &apos;dark&apos;, set only if you have different favicons for light and dark mode
+       sizes: &apos;128x128&apos;,              // (Optional) Size of the favicon, set only if you have favicons of different sizes
+     }
+  ]
+}
+
+export const navBarConfig: NavBarConfig = {
+  links: [
+    LinkPreset.Home,
+    LinkPreset.Archive,
+    LinkPreset.About,
+    {
+      name: &apos;随机图&apos;,
+      url: &apos;https://pic.onani.cn&apos;,     // Internal links should not include the base path, as it is automatically added
+      external: true,                               // Show an external link icon and will open in a new tab
+    },
+    {
+      name: &apos;GitHub&apos;,
+      url: &apos;https://github.com/saicaca/fuwari&apos;,     // Internal links should not include the base path, as it is automatically added
+      external: true,                               // Show an external link icon and will open in a new tab
+    },
+  ],
+}
+
+export const profileConfig: ProfileConfig = {
+  avatar: &apos;assets/images/111.jpg&apos;,  // Relative to the /src directory. Relative to the /public directory if it starts with &apos;/&apos;
+  name: &apos;二叉树树&apos;,
+  bio: &apos;Protect What You Love./爱你所爱！&apos;,
+  links: [
+    // {
+      // name: &apos;Twitter&apos;,
+      // icon: &apos;fa6-brands:twitter&apos;,       // Visit https://icones.js.org/ for icon codes
+                                        // You will need to install the corresponding icon set if it&apos;s not already included
+                                        // `pnpm add @iconify-json/&amp;lt;icon-set-name&amp;gt;`
+      // url: &apos;https://twitter.com&apos;,
+    // },
+    // {
+      // name: &apos;Steam&apos;,
+      // icon: &apos;fa6-brands:steam&apos;,
+      // url: &apos;https://store.steampowered.com&apos;,
+    // },
+    {
+      name: &apos;GitHub&apos;,
+      icon: &apos;fa6-brands:github&apos;,
+      url: &apos;https://github.com/afoim&apos;,
+    },
+    {
+      name: &apos;QQ&apos;,
+      icon: &apos;fa6-brands:qq&apos;,
+      url: &apos;https://qm.qq.com/q/Uy9kmDXHYO&apos;,
+    },
+    {
+      name: &apos;QQ&apos;,
+      icon: &apos;fa6-solid:envelope&apos;,
+      url: &apos;mailto:acofork@foxmail.com&apos;,
+    },
+  ],
+}
+
+export const licenseConfig: LicenseConfig = {
+  enable: true,
+  name: &apos;CC BY-NC-SA 4.0&apos;,
+  url: &apos;https://creativecommons.org/licenses/by-nc-sa/4.0/&apos;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;清理多余文件。在根目录下的 &lt;code&gt;src/content/posts&lt;/code&gt; 文件夹中会有一些示例文章，这些文章介绍了一些MarkDown语法和技巧，可以让你更快上手Fuwari和fuwari，我们可以将其保存到别处&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;至此，你已经可以开始撰写文章了&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;让我们开始写作！&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;首先，在项目根目录执行：&lt;code&gt;pnpm new-post &amp;lt;这里填写你的文章标题&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后，在根目录下的 &lt;code&gt;src/content/posts&lt;/code&gt; 文件夹中会多出一个 &lt;code&gt;xxx.md&lt;/code&gt;文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们使用MarkText打开这个文件，你可以看到一些基本信息，我们只需要关注几个重要的信息&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;pre&gt;&lt;code&gt;title: xxx
+published: 2024-10-14
+description: &apos;&apos;
+image: &apos;&apos;
+tags: []
+category: &apos;&apos;
+draft: false 
+lang: &apos;&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;title：文章标题&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;published：文章创建时间&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;description：文章描述，正常会显示在文章标题下面&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;image：文章封面图（同目录需要写 &lt;code&gt;./&lt;/code&gt; 如：&lt;code&gt;./assets/images/2024-10-14-11-33-28-image.webp&lt;/code&gt;）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;tag：文章标签&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;category：文章分类&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们还需要更改根目录下的 &lt;code&gt;astro.config.mjs&lt;/code&gt; 。在第34行更改 &lt;code&gt;stie:&lt;/code&gt; 为你的站点URL，如： &lt;code&gt;site: &quot;https://onani.cn&quot;,&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;欸？有的人就会问了，MarkDown固然好，但是我要如何处理图片的置入呢&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;这也很简单，多亏了MarkText这款软件，我们也可以像编辑Typecho一样直接使用Ctrl+CV来在MarkDown语法中置入图片，但是我们需要一些小设置：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;依次点击：MarkText软件的左上角的三条杠 -&amp;gt; File -&amp;gt; Perferences -&amp;gt; 左侧的Image分类 -&amp;gt; 如图设置 -&amp;gt; 注意更改第一个选项为Copy开头的选项，将Perfer开关打开，然后上下两个文本框一个填写绝对路径一个填写相对路径&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/2024-10-14-12-54-21-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;这样，当置入图片时，会往 &lt;code&gt;assets/images&lt;/code&gt; 文件夹复制一份，然后通过&lt;code&gt;![1](assets/images/1.jpg)&lt;/code&gt;写入MarkDown文件。这样网站就能成功读取到图片啦。而你只需要Ctrl+CV，其他操作MarkText都会自动处理&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;至此，你已经会用MarkText编写MarkDown语法的博文了&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;本地预览，然后发布到Github&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;当你认为你的文章已经写得差不多时，想要看看效果？请到项目根目录执行：&lt;code&gt;pnpm dev&lt;/code&gt;，稍等片刻，你就可以本地预览你的博客啦&lt;img src=&quot;assets/images/2024-10-14-13-03-44-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;好！接下来我们需要使用Git将我们所做的更改发布到Github&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;首先，你需要让Git知道你是谁：&lt;code&gt;git config --global user.name &quot;你的Github用户名&quot;&lt;/code&gt;和&lt;code&gt;git config --global user.email &quot;你的Github邮箱@example.com&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后，设置远程仓库：&lt;code&gt;git remote add origin &amp;lt;远程仓库的URL&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;随后，让我们提交所有文件：&lt;code&gt;git add .&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;之后，让我们发布一个本地提交：&lt;code&gt;git commit -m &quot;项目初始化&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;最后，让我们将本地更改提交到远程仓库：&lt;code&gt;git push&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;此时，你的Github仓库应该已经有了新的提交&lt;img src=&quot;assets/images/2024-10-14-13-10-12-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;让Cloudflare连接上Github，使用Pages服务展示你的博客（FREE！）&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;前往Cloudflare的 Workers 和 Pages 页面，创建一个新Pages&lt;img src=&quot;assets/images/2024-10-14-13-14-28-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;然后选择连接Git存储库，连接你的Github，随后设置构建命令：&lt;code&gt;pnpm build&lt;/code&gt;  ，然后设置构建输出目录：&lt;code&gt;dist&lt;/code&gt; ，如图&lt;img src=&quot;assets/images/2024-10-14-13-16-15-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;绑定自定义域，访问自定义域即可访问你的博客！&lt;img src=&quot;assets/images/2024-10-14-13-17-00-image.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;随后，你只需要在本地编写文章，然后&lt;a href=&quot;#%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88%E7%84%B6%E5%90%8E%E5%8F%91%E5%B8%83%E5%88%B0github&quot;&gt;使用Git将更改推送到远程仓库&lt;/a&gt;，Cloudflare就会自动部署，更新你的博客！&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>来试试RaiDrive，薄纱SSHFS！各大网盘、对象存储、Linux目录通通挂载为本地硬盘！</title><link>https://onani.cn/posts/raidrive/</link><guid isPermaLink="true">https://onani.cn/posts/raidrive/</guid><description>RaiDrive相比于SSHFS具有高达42中服务和协议支持挂载到本地硬盘，美中不足的是，它拥有弹窗广告</description><pubDate>Mon, 14 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;[!WARNING]
+此软件具有广告&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5&gt;前几天，我推荐使用SSHFS来将Linux的目录挂载为本地磁盘方便访问，今天，我又发现一个神级软件：&lt;a href=&quot;https://www.raidrive.com&quot;&gt;RaiDrive&lt;/a&gt;&lt;/h5&gt;
+&lt;hr /&gt;
+&lt;h3&gt;简介&lt;/h3&gt;
+&lt;p&gt;RaiDrive GUI支持Win，CLI支持Linux，并且界面引导友好
+&lt;a href=&quot;https://www.raidrive.com/download&quot;&gt;RaiDrive下载页&lt;/a&gt;
+&lt;img src=&quot;https://ipfs.crossbell.io/ipfs/QmcyopFzKrVQPcgNhXCmLweWEpTb4pgPVpDvrgeHLGoV5D?img-quality=75&amp;amp;img-format=auto&amp;amp;img-onerror=redirect&amp;amp;img-width=3840&quot; alt=&quot;2a73cbd377d121b8ff28b2bdae70e3d3_720&quot; /&gt;
+支持Google Drive、OneDrive、AWS S3 对象存储、Cloudflare R2 对象存储、阿里云、谷歌云、腾讯云、甲骨文云、WebDAV、SFTP、FTP等&lt;strong&gt;42种服务和协议&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/bb2268b816b95526ab110b7ad812fc7e475cc2e3.png&quot; alt=&quot;QmbdLf1RoG9pusoZrzVfmkAVkV2MrTuFPAuV8Q4LYQfRGP.png&quot; /&gt;&lt;img src=&quot;assets/images/39659022b0c994b0c2b96371f2e5a5190f499d88.png&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;assets/images/99aa435682ec5b9650474e2c46258eef2436214b.png&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;assets/images/500e9376d977c63db51f3e55c31b76260ff86e8b.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;例图&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/d194b051ab76b5148fc6ba770fae34fe1182da23.png&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;assets/images/98be163801b426ec12d4af6550d1dc5c41c36c0c.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;容量获取不准，但是不妨碍它牛逼😋&lt;/h3&gt;
+&lt;h3&gt;疑难解答&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;软件正常运行需要&lt;strong&gt;NET. 6.0&lt;/strong&gt;和&lt;strong&gt;Microsoft Edge WebView2&lt;/strong&gt;。安装程序会尝试进行修复，如果失败请手动下载&lt;/li&gt;
+&lt;li&gt;该软件可以挂载一些无法被Windows原生WebDAV挂载（映射到网络驱动器）的服务&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>试试Cloudflare IP优选！让Cloudflare在国内再也不是减速器！</title><link>https://onani.cn/posts/cf-fastip/</link><guid isPermaLink="true">https://onani.cn/posts/cf-fastip/</guid><description>使用SaaS双域名来让你的网站解析的IP进行分流优选，提高网站可用性和速度</description><pubDate>Mon, 14 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h4&gt;未优选&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/098f9ee71ae62603022e542878673e19bdcaf196.png&quot; alt=&quot;QmZoinxZgAzu7Skh7BqsxmDQGU1sXtLLskJcyQuRAQNKww.png&quot; /&gt;&lt;/p&gt;
+&lt;h4&gt;已优选&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/e98ce10d846475aaec5cf73546d9b5caffefc4c0.png&quot; alt=&quot;QmaNVwAwSRvqdL5SrvWVCGCQqmacP3d62yoLxofGscNoKq.png&quot; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;结论：可见，优选过的网站响应速度有很大提升，并且出口IP也变多了。这能让你的网站可用性大大提高，并且加载速度显著变快。
+&lt;strong&gt;优选节点使用：&lt;a href=&quot;https://cloudflare.182682.xyz&quot;&gt;cloudflare.182682.xyz&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;正式开搞！&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我们需要&lt;strong&gt;两个域名&lt;/strong&gt;（比如：onani.cn和acofork.cn）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这里我们让onani.cn成为主力域名，让acofork.cn成为辅助域名&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;首先新建一个DNS解析，指向你的&lt;strong&gt;源站&lt;/strong&gt;，&lt;strong&gt;开启cf代理&lt;/strong&gt;
+&lt;img src=&quot;assets/images/c94c34ee262fb51fb5697226ae0df2d804bf76fe.png&quot; alt=&quot;QmfBKgDe77SpkUpjGdmsxqwU2UabvrDAw4c3bgFiWkZCna.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;前往 SSL/TLS -&amp;gt; 自定义主机名。设置回退源为你刚才的DNS解析的域名（xlog.acofork.cn），添加自定义主机名为你最终想让用户访问的域名（onani.cn）并且按照指示在主力域名（onani.cn）添加TXT所有权验证和TXT证书验证，直到证书状态和主机名状态都变为有效
+&lt;img src=&quot;assets/images/f6170f009c43f7c6bee4c2d29e2db7498fa1d0dc.png&quot; alt=&quot;QmRYrwjeDMDQCj8G9RYkpjC3X4vpwE77wpNpbqKURwBber.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;继续在你的辅助域名添加一条解析。CNAME到优选节点：cloudflare.182682.xyz，&lt;strong&gt;不开启cf代理&lt;/strong&gt;
+&lt;img src=&quot;assets/images/4f9f727b0490e0b33d360a2363c1026003060b29.png&quot; alt=&quot;QmNwkMqDEkCGMu5jsgE6fj6qpupiqMrqqQtWeAmAJNJbC4.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;最后在你的主力域名添加解析。域名为之前在辅助域名的自定义主机名（onani.cn），目标为刚才的cdn.acofork.cn，&lt;strong&gt;不开启cf代理&lt;/strong&gt;
+&lt;img src=&quot;assets/images/6f51cb2a42140a9bf364f88a5715291be616a254.png&quot; alt=&quot;QmeK3AZghae4J4LcJdbPMxBcmoNEeF3hXNBmtJaDki8HYt.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;优选完毕，尝试访问&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;优选工作流：用户访问 -&amp;gt; 由于最终访问的域名设置了CNAME解析，所以实际上访问了cdn.acofork.cn，并且携带 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt; -&amp;gt; 到达cloudflare.182682.xyz进行优选 -&amp;gt; 优选结束，cf边缘节点识别到了携带的 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt; 查询发现了回退源 -&amp;gt; 回退到回退源内容（xlog.acofork.cn） -&amp;gt; 访问成功&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr /&gt;
+&lt;h3&gt;疑难解答&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Q：如果我的源站使用Cloudflare Tunnels
+A：需要在Tunnels添加两个规则，一个指向你的辅助域名，一个指向最终访问的域名。然后删除最终访问域名的DNS解析（&lt;strong&gt;但是不要直接在Tunnels删，会掉白名单，导致用户访问404&lt;/strong&gt;）。然后跳过第一步&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原理：假设你已经配置完毕，但是Cloudflare Tunnels只设置了一个规则。
+分类讨论，假如你设置的规则仅指向辅助域名，那么在优选的工作流中：用户访问 -&amp;gt; 由于最终访问的域名设置了CNAME解析，所以实际上访问了cdn.acofork.cn，并且携带 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt; -&amp;gt; 到达cloudflare.182682.xyz进行优选 -&amp;gt; 优选结束，cf边缘节点识别到了携带的 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt; 查询发现了回退源 -&amp;gt; 回退源检测 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt;不在白名单 -&amp;gt; 报错 404 Not Found。访问失败
+分类讨论，假如你设置的规则仅指向最终访问的域名，那么在优选的工作流中：用户访问 -&amp;gt; 由于最终访问的域名设置了CNAME解析，所以实际上访问了cdn.acofork.cn -&amp;gt; 由于cdn.acofork.cn不在Tunnels白名单，则访问失败&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Q：如果我的源站使用了Cloudflare Origin Rule（端口回源）
+A：需要将规则的生效主机名改为最终访问的域名，否则不触发回源策略（会导致辅助域名无法访问，建议使用Cloudflare Tunnels）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原理：假设你已经配置完毕，但是Cloudflare Origin Rule（端口回源）规则的生效主机名为辅助域名
+那么在优选的工作流中：用户访问 -&amp;gt; 由于最终访问的域名设置了CNAME解析，所以实际上访问了cdn.acofork.cn，并且携带 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt; -&amp;gt; 到达cloudflare.182682.xyz进行优选 -&amp;gt; 优选结束，cf边缘节点识别到了携带的 &lt;strong&gt;源主机名：onani.cn&lt;/strong&gt; 查询发现了回退源 -&amp;gt; 回退到回退源内容（xlog.acofork.cn）-&amp;gt; 但是由于&lt;strong&gt;源主机名：onani.cn&lt;/strong&gt;不在Cloudflare Origin Rule（端口回源）的规则中 -&amp;gt; 无法触发回源策略，访问失败&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Q：如果我的源站使用serv00
+A：需要在WWW Web Site界面添加两个规则，一个指向你的辅助域名，一个指向最终访问的域名。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原理：假设你已经配置完毕，但是serv00仅配置其中一个域名
+那么在优选的工作流中：会导致访问错误，serv00将会拦截不在白名单的域名请求&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>Cloudflare R2+Workers！马上搭建自己的云上图床！</title><link>https://onani.cn/posts/cf-r2-wk-p/</link><guid isPermaLink="true">https://onani.cn/posts/cf-r2-wk-p/</guid><description>使用R2存储图片，通过Workers连接，最后使用a标签或img标签在网页中嵌入展示，全链路上云</description><pubDate>Mon, 14 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;&lt;strong&gt;结果图&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/408795f3ec1a5a9baf91b6cd7564d6f1d7dbc5bd.png&quot; alt=&quot;QmVgqgoC7G8NLS21WvR8j9gf5amu33XvuV68ZrgM5B9iFf.png&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;&lt;strong&gt;原理&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;图源由 Cloudflare R2 托管，通过两个 Workers 连接 R2 以展示随机横屏/竖屏图片，静态页面引用 Workers 的 URL 以实现以上界面&lt;/p&gt;
+&lt;h3&gt;&lt;strong&gt;创建 Cloudflare R2 存储桶&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;R2 实际上是一个对象存储。Cloudflare 提供 10G 的免费存储和每月 1000 万次的免费访问&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;进入&lt;a href=&quot;https://dash.cloudflare.com/&quot;&gt;Cloudflare 仪表盘&lt;/a&gt;，进入 R2 页面，如图&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/0ffb86d36ab0f3fcc24ef7b3d64c4bc72b6b53e7.png&quot; alt=&quot;QmU7u2JHUcevyHnwsCdAZfs7X7Fcdh3KJhn6eoy24Q5dGC.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选择创建存储桶&lt;img src=&quot;assets/images/26d3b3e26b9e2f641a2eea98c2ddb8891a0b7f6a.png&quot; alt=&quot;QmX3eCaCVEgE8AN29D9t2VpQ5t5SrZGKb8EcZv9oKpCqf2.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为你的存储桶起一个名字，然后单击创建&lt;img src=&quot;assets/images/7fa96a023d7969ab168d467ab6d05646e5241884.png&quot; alt=&quot;QmVad5eoJCLpSNZ4HCvTPJfD8rpg4aePMzZ7j2DZATn1XD.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进入如下页面就已经创建完毕了&lt;img src=&quot;assets/images/719f2dfe59c73fa820ffc6cc2d9749ca14b9bece.png&quot; alt=&quot;QmSdzwBJpw2L4a8LJ3eM3VMJs3d5oV5iFCxCMtv69VZmYH.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;返回 R2 首页。因为在下文我们需要使用 API 来进行文件传输，所以需要创建你的 R2 API 令牌，单击管理 R2 API 令牌&lt;img src=&quot;assets/images/9b1a338acae642ce7ce71dd41454903b1cfeafd0.png&quot; alt=&quot;QmbS8zjJTESwsmycKBSC9kmabAA9dtSCUX8nbUDWg4BWRX.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;单击创建 API 令牌，如图&lt;img src=&quot;assets/images/9512f23e08a60948e721848118f5eb096449909b.png&quot; alt=&quot;QmPzJEHVAm4z3S1SHY4k99TugrPyTB9DXpyRR8Loj22bz3.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;因为我们需要该 API 来管理单个 R2 存储桶，所以选择&lt;strong&gt;对象读和写&lt;/strong&gt;，详细配置如图&lt;img src=&quot;assets/images/0361e2b00351559eaebb18f3e6bb15a94b8578e9.png&quot; alt=&quot;QmNY9p8hksi18B9R8TVfdGgu336oQ3cPmghyfYXE9CDGD4.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建 API 令牌后，新页面会展示令牌的详细信息，&lt;strong&gt;仅会展示一次！！！&lt;/strong&gt; 保持这个页面，直到你将该页面的所有信息都已经妥善保存，不要关闭界面，否则，你需要轮转 API 令牌以禁用之前的旧密钥，如图&lt;img src=&quot;assets/images/f4214f6fdf67fa7bf694d0a1501ecc21aef45a90.png&quot; alt=&quot;QmZTUwbycqbJhVP6PatD3psYy7ej9PDDoiXbmDWoakPhwx.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;确保你已经妥善保存你的 R2 API 令牌，然后进行下一步&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;&lt;strong&gt;为你的存储桶添加文件&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;因为 Web 界面传输文件较慢且不支持传输大于 300MB 的文件。这里使用本地部署 AList 然后连接你的 R2 存储桶实现高速上传&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;笔者使用 Windows。前往&lt;a href=&quot;https://github.com/alist-org/alist/releases&quot;&gt;AList - Github Release&lt;/a&gt;下载适用于 Windows 的最新可执行文件，如图&lt;img src=&quot;assets/images/a2d1f289e464a9fb6367e2b7ff0b695916742698.png&quot; alt=&quot;QmPDRDJGeGStreyZMXVYofbE9FCs1T1MyDek3KUbB3Kk5b.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将下载的压缩包解压，并将其中的&lt;code&gt;alist.exe&lt;/code&gt;放入一个空文件夹&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;单击搜索框，输入 cmd 并回车，如图&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/3abdda195c58812866d49879c683a044e8acf7f8.png&quot; alt=&quot;QmSt8aFtaeEprJHASEiNPB67UHcHoSxsbhhHUPxW6QkWSo.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/f90fccfe1db62aff7a0a722cd3c5c319da563ae2.png&quot; alt=&quot;QmNkMhDhpPLkYCpVhE1ov7Q6A34uWDvraCqNvuTqaCkujT.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;在 cmd 中输入&lt;code&gt;alist.exe server&lt;/code&gt;并且不要关闭窗口，运行成功后如图&lt;img src=&quot;assets/images/2c0ec8fb4de7f2a9a1b8107e3506cb5a8d7d7eff.png&quot; alt=&quot;QmdzyY8xbic8jdnZEXegefoZPeizqHa4ZkdMnRKoguBMkf.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;打开浏览器，输入&lt;code&gt;localhost:5244&lt;/code&gt;即可进入 AList 控制台，如图&lt;img src=&quot;assets/images/867fe02a124c886777d4ba64f6d1e4498c686709.png&quot; alt=&quot;QmUBFKu7mCiRneCrsTNPxTH6S4gxwtXf9cwLzf4dKW9LLR.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用户名：&lt;code&gt;admin&lt;/code&gt;密码：&lt;code&gt;在cmd窗口中，如图&lt;/code&gt;。你可以使用鼠标左键在终端中框选内容然后单击鼠标右键进行复制操作&lt;img src=&quot;assets/images/8cedc3475cd8358507587de8a6b2a91980fe9af4.png&quot; alt=&quot;QmVH3qZYo3QE6anNHymwkikq5MSeJphrZNR7RCH5jpP3wn.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;注意，在 cmd 中，鼠标左键点击或拖动 cmd 的终端界面会导致进入选择状态，程序将会被系统阻塞，&lt;strong&gt;需要在终端界面点按鼠标右键解除&lt;/strong&gt;。若进程被阻塞，cmd 的进程名会多一个&lt;strong&gt;选择&lt;/strong&gt;，请注意。如图是程序被阻塞的例子，&lt;strong&gt;在终端界面点按鼠标右键即可解除&lt;/strong&gt;
+&lt;img src=&quot;assets/images/afb945ff610c0463ee0db97f52bc42a865b00603.png&quot; alt=&quot;QmapESiqSEvbYq3AJs15yYvhemRxSHrJaccjTFr99muX6Z.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;现在，你已经成功以管理员身份登入了 AList单击最下面的&lt;strong&gt;管理&lt;/strong&gt;&lt;img src=&quot;assets/images/eb0c3753205f42133445dfcee5f1291debd6c649.png&quot; alt=&quot;QmfNE53GThdjVrh4q64MJcZqwcGPD7UtcYTNw9bVBaSEaF.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;你会进入到如图界面。尽管 AList 运行在本地，也建议更改你的用户名和密码&lt;img src=&quot;assets/images/3bde577194580e4d17aa457231360733175e2b0d.png&quot; alt=&quot;QmNdD8UU8fkVDBz5dXdJhCF2fZg8P1FwrcMaaTsG6a7ENy.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;更改账密，重新以新账密登录&lt;img src=&quot;assets/images/a5ba3b6cc73002f3e96b6aab8c4e252f697802da.png&quot; alt=&quot;Qmas7pMiPR2FNTXheBT1xGNUpzDiSzv7J7yd6oCuT17yad.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进入控制台，然后单击存储，如图&lt;img src=&quot;assets/images/bb8fc961e43dffa99994c0d0e703ba98fc01b85a.png&quot; alt=&quot;QmS4gGyCM1j3RXgHEPuZ1zTbLAvGtVBEiPXJe9QMF3dD2D.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选择添加，如图&lt;img src=&quot;assets/images/2807d1dbc07fed008c8177cd3b2b89bfd03cc8be.png&quot; alt=&quot;QmRDVxt8WbrVkHavgFNXj3qC86ysw6sSZhPy3Uf2ixKp2E.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;详细配置如图。挂载路径即 AList 展示路径，推荐使用&lt;code&gt;/R2/你的存储桶名字&lt;/code&gt;，地区为&lt;code&gt;auto&lt;/code&gt;&lt;img src=&quot;assets/images/2024-10-16-11-37-53-image.png&quot; alt=&quot;&quot; /&gt;回到主页，如图&lt;img src=&quot;assets/images/65265d29e91f146ecbe3d92218eb9af49eac1c8b.png&quot; alt=&quot;QmSnR9Ptrssx4nqk9qCvhFUNKQyQqJiN7GRscwoj4Dczgj.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;尝试上传文件，如图&lt;img src=&quot;assets/images/061c995a66c34ebc341f692d4eb82d5657d791d6.png&quot; alt=&quot;QmPqFsmZNNnh4jNyLS7X3h8Zr6ZCVqTqGVwTxmPDdbmrGW.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以看到，速度非常快&lt;img src=&quot;assets/images/51d0a617cbda108ce6c12fb25f71fb5223a0cddb.png&quot; alt=&quot;QmXfGK6aZjz741GrY8RfFfKMkUzDMB3xhx93PGZ9S1QycT.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为你的图床创建目录以分类横屏和竖屏图等，以便下文使用 Workers 连接 R2 来调用。后文我将使用R2的&lt;code&gt;/ri/h&lt;/code&gt; 路径作为横屏随机图目录、&lt;code&gt;/ri/v&lt;/code&gt; 路径作为竖屏随机图目录&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/3bde577194580e4d17aa457231360733175e2b0d.png&quot; alt=&quot;QmNdD8UU8fkVDBz5dXdJhCF2fZg8P1FwrcMaaTsG6a7ENy.png&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;&lt;strong&gt;创建 Workers，连接 R2&lt;/strong&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;进入&lt;a href=&quot;https://dash.cloudflare.com/&quot;&gt;Cloudflare 仪表盘&lt;/a&gt;，进入 Workers 和 Pages 页面，如图&lt;img src=&quot;assets/images/49ccd51771082fdc94eecb270caf987d257cd987.png&quot; alt=&quot;QmW5UaUap8T2R37u5dzmKGLmUgk4qKnSMFwHBVHqvVbkVA.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;单击创建，选择创建 Workers，名称自取，单击部署&lt;img src=&quot;assets/images/95102dd09752a103d8022b1f281538e729b7a448.png&quot; alt=&quot;QmVvLv5n41QQfDfYiVWYRpsfw7TVNGy1BYuv5e8vBRhKLA.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选择编辑代码&lt;img src=&quot;assets/images/fa78af856b3ff3798c77a55be15b2644dec944c1.png&quot; alt=&quot;QmTbRifzXQ593DGyjFQMbA9exyNp2iAeAg4zbVrfFimQc4.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;粘贴代码（创建随机横屏图）：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;export default {
+  async fetch(request, env, ctx) {
+    // R2 bucket 配置
+    const bucket = env.MY_BUCKET;
+
+    try {
+      // 列出 /ri/h 目录下的所有对象
+      const objects = await bucket.list({ prefix: &apos;ri/h/&apos; });
+
+      // 从列表中随机选择一个对象
+      const items = objects.objects;
+      if (items.length === 0) {
+        return new Response(&apos;No images found&apos;, { status: 404 });
+      }
+      const randomItem = items[Math.floor(Math.random() * items.length)];
+
+      // 获取选中对象
+      const object = await bucket.get(randomItem.key);
+
+      if (!object) {
+        return new Response(&apos;Image not found&apos;, { status: 404 });
+      }
+
+      // 设置适当的 Content-Type
+      const headers = new Headers();
+      headers.set(&apos;Content-Type&apos;, object.httpMetadata.contentType || &apos;image/jpeg&apos;);
+
+      // 返回图片内容
+      return new Response(object.body, { headers });
+    } catch (error) {
+      console.error(&apos;Error:&apos;, error);
+      return new Response(&apos;Internal Server Error&apos;, { status: 500 });
+    }
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;点击左侧的文件图标&lt;img src=&quot;assets/images/b02f29fbafb44ad36a0fa770d013069a374394a8.png&quot; alt=&quot;QmQGQTiTXSESU2TSJ6tc3KrzWU4KABKqn6QZ1GdWqKnWmc.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在&lt;code&gt;wrangler.toml&lt;/code&gt;中填入：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;[[r2_buckets]]
+binding = &quot;MY_BUCKET&quot;
+bucket_name = &quot;114514&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;保存修改，点击右上角的部署&lt;img src=&quot;assets/images/6751c7b5122b938e01087d1bed629fcad1182a10.png&quot; alt=&quot;QmP7hXdtenrJrzJRRePHQATGtyAsZEr5MkMsboXvmNUxTx.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在设置 - 变量找到 R2 存储桶绑定，添加你的存储桶，变量名即上文的&lt;code&gt;MY_BUCKET&lt;/code&gt;&lt;img src=&quot;assets/images/572f1c9946b5b6de5350c708e579d9887949b6e9.png&quot; alt=&quot;QmStitSyATnA8sY9tTgZaXXqmqkGPUtZmMxn9KjbFQzgTc.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在设置 - 触发器添加你的自定义域名以便访问&lt;img src=&quot;assets/images/706b3acbb372307713e38c96fc867f4e96234fd7.png&quot; alt=&quot;QmUMxtkCiKsgFw8afRUGREFztXE9D5W6FmCbAUB7DaVH5o.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/1a6fa505881591a294f0b4ef4a1940e40fe57ab9.png&quot; alt=&quot;QmPF9iCoq6n8Jj2Z6kPkdJSCm45VJystZoYcir55yceCQo.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;访问效果，每次刷新都不一样&lt;img src=&quot;assets/images/0ba1efee8174e0d3db761bbd613a7b94b9738cee.png&quot; alt=&quot;QmQgEdjXxF9oph2jYKzFMJToX9WfG11jUmPiNJnjhYVN4N.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;&lt;strong&gt;通过使用 HTML 的 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 标签引用即可达到开头的效果&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;如：&lt;code&gt;&amp;lt;img src=&quot;你的域名&quot; alt=&quot;&quot;&amp;gt;&lt;/code&gt;
+&amp;lt;img title=&quot;&quot; src=&quot;https://hrandom.onani.cn&quot; alt=&quot;loading-ag-4760&quot;&amp;gt;&lt;/p&gt;
+</content:encoded></item><item><title>飞牛NAS玩机体验</title><link>https://onani.cn/posts/fnos/</link><guid isPermaLink="true">https://onani.cn/posts/fnos/</guid><description>飞牛NAS系统是一个现代的开源的NAS系统。影视刮削在国内属于TOP1，并且刚需的Docker软件也功能全面易用，博主本人也在使用</description><pubDate>Mon, 14 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;吸引我的东西&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;影视刮削：飞快，薄纱Plex几条街。通过&lt;a href=&quot;/autobangumi&quot;&gt;AutoBangumi&lt;/a&gt;可以完美自动追番+刮削一条龙服务。偶尔会有不准，但可以手动匹配，数据源来自&lt;a href=&quot;https://www.themoviedb.org/&quot;&gt;TMDB&lt;/a&gt;和&lt;a href=&quot;https://www.imdb.com/&quot;&gt;IMDB&lt;/a&gt;
+&lt;img src=&quot;assets/images/f1bd7089efdf00097d5474ef967a62dcfca42e98.png&quot; alt=&quot;QmbNXd4FJ8FM8mwkKxJNdBoNbvhawJ2HdSvW5tFUt3o4ub.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;相册：可以通过手机APP自动备份，支持仅备份图片，可以多用户使用，存储互不干扰，也可以设置要共享的图片
+&lt;img src=&quot;assets/images/2f9981f8397cc1278807ed28f8a2e15954868fec.png&quot; alt=&quot;QmeLJ7in4xcokPWUgkkSobDLUTrFrXep2o38qUXQ1njQR9.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;注意事项&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;飞牛NAS在安装的时候会叫你选择安装盘，然后会将安装盘的一部分空间（默认为64GB）作为系统分区，其余空间可用于创建存储空间（但是系统盘不能和别的盘组存储池，只能单独建存储池）
+&lt;img src=&quot;assets/images/6403ef19d941abdc93d8c7da01364a8983c98109.png&quot; alt=&quot;QmNfRbvHu1fuYoincACcP2MG4yV4pgRni3rb4Y9J7uw4FW.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;应用商店安装的软件需要先授予目录访问权限应用才能读取目录（无论是原生还是Docker应用）
+&lt;img src=&quot;assets/images/79af3b25d8b677b2718c953c0d431ead2f137e1d.png&quot; alt=&quot;QmP4unAVra1zy7gkjEzSCYEDAJMMe1BVWPKoVyjYv8b9Ho.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发行版为Debian 12。根目录为系统分区的空间，/vol1 为存储空间1的空间 /vol2 为存储空间2的空间。推荐使用&lt;a href=&quot;https://onani.cn/RaiDrive&quot;&gt;RaiDrive&lt;/a&gt;或&lt;a href=&quot;/SSHFS&quot;&gt;SSHFS&lt;/a&gt;挂载Linux目录到Windows
+&lt;img src=&quot;assets/images/d4ec6f87893f4af5d7eedb2e2a19a784fd6c6f92.png&quot; alt=&quot;QmWMQHNpJUUPg9B1Hdw2zmwLx9q6bcS52nUFiB3P9iYvU9.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SSH需要自己开，账密为NAS管理员账密，建议登上之后改为仅密钥登录，参见：&lt;a href=&quot;https://www.runoob.com/w3cnote/set-ssh-login-key.html&quot;&gt;设置 SSH 通过密钥登录&lt;/a&gt;
+&lt;img src=&quot;assets/images/9f92130465ab62e912b7404266febc7212e2125b.png&quot; alt=&quot;QmTk3va2NCbYTcVewVjuqjGx6MwMwiUnManrNwxvEq4SBR.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;各网卡测试&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;名称&lt;/th&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th&gt;品牌&lt;/th&gt;
+&lt;th&gt;是否免驱&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Realtek GBE Family （r8168）&lt;/td&gt;
+&lt;td&gt;有线&lt;/td&gt;
+&lt;td&gt;Realtek（瑞昱）&lt;/td&gt;
+&lt;td&gt;否，需要自行安装驱动&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Realtek 8852BE&lt;/td&gt;
+&lt;td&gt;无线&lt;/td&gt;
+&lt;td&gt;Realtek（瑞昱）&lt;/td&gt;
+&lt;td&gt;否，需要自行安装驱动&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Intel AC3160&lt;/td&gt;
+&lt;td&gt;无线&lt;/td&gt;
+&lt;td&gt;Intel（英特尔）&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;USB有线网卡&lt;/td&gt;
+&lt;td&gt;有线&lt;/td&gt;
+&lt;td&gt;Realtek（瑞昱）&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;各存储模式区别&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;模式&lt;/th&gt;
+&lt;th&gt;作用&lt;/th&gt;
+&lt;th&gt;是否能扩容&lt;/th&gt;
+&lt;th&gt;是否能换盘&lt;/th&gt;
+&lt;th&gt;容灾&lt;/th&gt;
+&lt;th&gt;是否能热备&lt;/th&gt;
+&lt;th&gt;是否能修改存储模式&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Basic&lt;/td&gt;
+&lt;td&gt;将物理硬盘的一部分或者全部作为一个存储池，不可扩容，仅能单盘创建这个模式&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;无&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;是，可转为RAID&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Linear&lt;/td&gt;
+&lt;td&gt;将一个或多个物理硬盘的一部分或者全部作为一个存储池，可扩容&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;无&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RAID类&lt;/td&gt;
+&lt;td&gt;自行使用搜索引擎搜索，更详细&lt;/td&gt;
+&lt;td&gt;未测试&lt;/td&gt;
+&lt;td&gt;未测试&lt;/td&gt;
+&lt;td&gt;未测试&lt;/td&gt;
+&lt;td&gt;未测试&lt;/td&gt;
+&lt;td&gt;未测试&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ol&gt;
+&lt;li&gt;NAS迅雷内测码：迅雷牛通&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item><item><title>使用SSHFS将Linux目录挂载为Windows磁盘</title><link>https://onani.cn/posts/sshfs/</link><guid isPermaLink="true">https://onani.cn/posts/sshfs/</guid><description>SSHFS拥有图形界面，可以通过SFTP协议将Linux目录映射为一个本地磁盘，便于管理文件</description><pubDate>Sat, 12 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;有一款更好用的软件，支持多达42种服务或协议：&lt;a href=&quot;https://onani.cn/RaiDrive&quot;&gt;RaiDrive&lt;/a&gt;😋&lt;/h3&gt;
+&lt;hr /&gt;
+&lt;h3&gt;优点&lt;/h3&gt;
+&lt;p&gt;可以像管理Windows文件一样管理Linux文件，不需要敲代码&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;正式开始&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;下载并安装下面的软件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;::github{repo=&quot;billziss-gh/sshfs-win&quot;}&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;billziss-gh/winfsp&quot;}&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;evsar3/sshfs-win-manager&quot;}&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;打开SSHFS-Win Manager，添加你的SSH服务器（我这里使用私钥连接）
+&lt;img src=&quot;assets/images/ff6462dca9c79a35f3a5b7816d997396d6f2accf.png&quot; alt=&quot;QmccEuSGovyVuJeTRYEUKNr2XSPpKTeoqq82rZYMyhazh2.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;点击连接即可将Linux目录挂载到本地磁盘
+&lt;img src=&quot;assets/images/9f6796b969af0b43136fc44a2773f2a2baa06006.png&quot; alt=&quot;QmQHZCeYbQ3GmjWDqWqEpdXWYnQy6KHnep5m6bu6X3eCNH.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;效果&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/add85483f97c229cee0a53f8cae7d7957b5d7d9c.png&quot; alt=&quot;QmNjTfv6XncV2dVddt4k6E9XN6tjuXf5rmXPhh2ggcemkU.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/d4ec6f87893f4af5d7eedb2e2a19a784fd6c6f92.png&quot; alt=&quot;QmWMQHNpJUUPg9B1Hdw2zmwLx9q6bcS52nUFiB3P9iYvU9.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;疑难解答&lt;/h3&gt;
+&lt;p&gt;如果无法连接，请打开设置的Debug Panel，根据报错着手解决
+&lt;img src=&quot;https://ipfs.crossbell.io/ipfs/QmWW58e68YLKFoKbZG63CwWVqgxkGfDiCJrM42Hj9hcN6M?img-quality=75&amp;amp;img-format=auto&amp;amp;img-onerror=redirect&amp;amp;img-width=3840&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/f86e715e2b925d251c346d42b0f9bb1c3481ba7b.png&quot; alt=&quot;QmWW58e68YLKFoKbZG63CwWVqgxkGfDiCJrM42Hj9hcN6M.png&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>影视飓风2024/10/9 补档：清晰度不如4年前！视频变糊是你的错觉吗？</title><link>https://onani.cn/posts/ysjf-2024-10-9/</link><guid isPermaLink="true">https://onani.cn/posts/ysjf-2024-10-9/</guid><description>影视飓风在2024/10/9发布了一个视频：“清晰度不如4年前！视频变糊是你的错觉吗？”但仅发布几小时后就被全网下架，背后的原因令人忍俊不禁</description><pubDate>Thu, 10 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;种子分发由一个G口服务器进行&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/d0cf471816594985dfc73a8e1fa73344e4da7b34.png&quot; alt=&quot;QmVSdY3zCyGRoH9CiWijtrdShENtnjrr6jf1EBsjsFFZ1h.png&quot; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;磁力链接：&lt;code&gt;magnet:?xt=urn:btih:ffb877b0e3e964cb307048542faa22571f515245&lt;/code&gt;
+Torrent：&lt;a href=&quot;https://r2-dl.afo.im/guest/%E6%B8%85%E6%99%B0%E5%BA%A6%E4%B8%8D%E5%A6%824%E5%B9%B4%E5%89%8D%EF%BC%81%E8%A7%86%E9%A2%91%E5%8F%98%E7%B3%8A%E6%98%AF%E4%BD%A0%E7%9A%84%E9%94%99%E8%A7%89%E5%90%97%EF%BC%9F.torrent&quot;&gt;下载种子&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/6dcc020b4806ca3aa9523a380cdada5a0ced1dc8.png&quot; alt=&quot;QmePwzbKiJxX6pbrGu5MvUyMjqxzwdqGivayojzG8FsweC.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/9b93ef5577e4941f0a47488fcce7ec2e796a11c4.png&quot; alt=&quot;QmS6YpbApGvXmgoL5u93QVNb5LnQmwN5jdzY2fyjNoHUHB.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/978f2b7e67672ffecb26a7e51205b21c90c30a20.png&quot; alt=&quot;QmTzY1LfXoPWy7EzzBANZZxVJ2fP2HF8jvr4DYWcYLT5W6.png&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>教你搭建自己的番剧库，实现自动追番！</title><link>https://onani.cn/posts/autobangumi/</link><guid isPermaLink="true">https://onani.cn/posts/autobangumi/</guid><description>使用AutuBangumi连接qBittorrent下载番剧，然后使用刮削软件刮削，设置一遍，享受终身</description><pubDate>Tue, 08 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;实现流程：&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;每当新番更新时AutoBangumi自动向qb推送种子下载并且重命名&lt;/li&gt;
+&lt;li&gt;刮削软件（如Plex，飞牛影视设置定时搜索媒体库）&lt;/li&gt;
+&lt;li&gt;你只需要选番，然后等待下载和看就行了 &lt;s&gt;实际并非&lt;/s&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;安装qbittorrent&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用于下载番剧&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;各系统安装方法各有不同。如果你安装的是非nox版本，记得在设置打开WebUI，并监听0.0.0.0:8080&lt;/p&gt;
+&lt;p&gt;Windows：&lt;a href=&quot;https://sourceforge.net/projects/qbittorrent/files/qbittorrent-win32&quot;&gt;SourceForge&lt;/a&gt;
+Linux：&lt;code&gt;apt/yum install qbittorrent-nox&lt;/code&gt;
+Docker：https://github.com/linuxserver/docker-qbittorrent&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/29e0e4c26c15463ff692aabcee747950e2d029d3.webp&quot; alt=&quot;8938ee430e5f74109c34c8c6d48e0e4f619cbeff.webp&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;安装AutoBangumi&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用于获取你订阅的番剧并在更新时自动发起下载任务&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;安装Docker，各系统安装方式各有不同&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;找一个你喜欢的文件夹创建&lt;code&gt;docker-compose.yaml&lt;/code&gt; ，并写入内容：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;services:
+AutoBangumi:
+  image: &quot;ghcr.io/estrellaxd/auto_bangumi:latest&quot;
+  container_name: AutoBangumi
+  volumes:
+    - ./config:/app/config
+    - ./data:/app/data
+  ports:
+    - &quot;7892:7892&quot;
+  network_mode: bridge
+  restart: unless-stopped
+  dns:
+    - 223.5.5.5
+  environment:
+    - TZ=Asia/Shanghai
+    - PGID=$(id -g)
+    - PUID=$(id -u)
+    - UMASK=022
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;运行命令：docker compose up -d&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进入localhost:7892 ，默认账号：admin，默认密码：adminadmin&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;点左边的设置图标 -&amp;gt; 下载设置，填入下载器信息，然后点击右下角的应用，直到右上角亮绿灯&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/94f407121de7816ee2dff78f948dcc2ded27b28f.png&quot; alt=&quot;QmbVcrgZ2C2FTt6QdfKsUkVQz9SCiQiyq1WCbphDiGW2mM.png&quot; /&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;前往蜜柑计划，注册账号，并订阅你想要的番剧（复制）
+&lt;img src=&quot;assets/images/0e22eab8db6ed2441f3d3be0b10d51944867df0a.png&quot; alt=&quot;QmXq7DcBkA4EecJikQE4snvPkNU2NQLy1EXUpAructteah.png&quot; /&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;回到 AutoBangumi，点击右上角的 +，添加 RSS（粘贴）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;静静等待，不出意外 AutoBangumi 会自动下载你订阅的番剧了（如果没有可以查看AutoBangumi的日志，或者尝试重启容器）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;下载旧集或已完结番剧&lt;/h3&gt;
+&lt;p&gt;首先推荐几个资源网（梯子自备）：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://acg.rip&quot;&gt;ACG.RIP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://share.acgnx.se&quot;&gt;末日动漫资源网&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;蜜柑计划 国内直连：1. https://mikanime.tv 2. https://hadestian.cn 3. https://mk.misakaae.com 4. https://mikan.yujiangqaq.com 5. RSS镜像站：https://mikanani.longc.top&lt;/li&gt;
+&lt;li&gt;蜜柑计划 需翻墙：https://mikanani.me
+然后找你想要的番剧下载&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;规范重命名&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;为了让软件能正确刮削元数据和剧集，我们需要规范重命名。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;注意！你只需要确保番剧名正确就可以了！子目录可以通过后面的脚本自动重命名！如果你不确定番剧名请前往TMDB搜索：&lt;a href=&quot;themoviedb.org&quot;&gt;The Movie Database (TMDB) &lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一级目录（qb 设置的下载目录）：不需要重命名&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;二级目录（番剧名，必须正确）：总之就是非常可爱&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;三级目录：（番剧的哪一季）：Season 1&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;四级目录：（番剧的哪一季的哪一集）：S01E01.MP4&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;s&gt;前往Episode-ReName，克隆仓库&lt;/s&gt;（已被删库，可尝试&lt;a href=&quot;https://alist.onani.cn/Episode-ReName.zip&quot;&gt;Episode-ReName.zip | Onani-AList&lt;/a&gt; )&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Win 可以通过右键菜单自动获取路径版.bat 通过右键一级目录选择自动剧集命名 。若使用.py 脚本则只能通过&lt;code&gt;python3 EpisodeReName.py &quot;D:/qbdownloads/bangumi&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;小贴士：&lt;/strong&gt; 可以使用&lt;a href=&quot;https://onani.cn/RaiDrive&quot;&gt;RaiDrive&lt;/a&gt;或&lt;a href=&quot;/SSHFS&quot;&gt;SSHFS&lt;/a&gt;将远程的Linux文件映射到Windows上，管理番剧更方便
+&lt;img src=&quot;assets/images/5cf6dfe73164f6a869a59817df53f939e936ab00.png&quot; alt=&quot;QmY7KM2MjudNksqvSkkFmwFgjjdD7ZQKLDaVPXR3jnXoxw.png&quot; /&gt;&lt;/p&gt;
+&lt;h3&gt;安装 Plex（或者安装飞牛云NAS）&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用于观看番剧&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;下载Plex Media Server&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;启动。默认端口 32400（如果进去是一堆乱码，添加/web后缀。例如：192.168.124.25:32400/web）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选择你的媒体库文件夹&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;开启远程访问，右上角设置 -&amp;gt; 远程访问&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;图为飞牛影视&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/images/acbde8bfd7395a8b5c744b9f1c550f3caac6c342.png&quot; alt=&quot;Qmf8Q1D9fUoFbu9MQsQHvaz13p3YV2XguR3RqUAse2KBEa.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;爽看&lt;/p&gt;
+</content:encoded></item><item><title>使用NoneBot2搭建你的QQBot！</title><link>https://onani.cn/posts/qqbot/</link><guid isPermaLink="true">https://onani.cn/posts/qqbot/</guid><description>使用Lagrange连接NoneBot2，打造自己的聊天机器人</description><pubDate>Tue, 08 Oct 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本文为：https://xfeed.app/notes/71448-13 的重置版&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;&lt;strong&gt;安装 Lagrange.OneBot&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;用于登录 QQ 实现收发消息&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;进入&lt;a href=&quot;https://github.com/LagrangeDev/Lagrange.Core/releases/tag/nightly&quot;&gt;Lagrange 的 GithubRelease&lt;/a&gt;，根据你的系统下载文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解压运行那唯一一个文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;它会跟你说没有配置文件，不用管，一路回车（你要会改就改）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;{
+    &quot;Logging&quot;: {
+        &quot;LogLevel&quot;: {
+            &quot;Default&quot;: &quot;Information&quot;,
+            &quot;Microsoft&quot;: &quot;Warning&quot;,
+            &quot;Microsoft.Hosting.Lifetime&quot;: &quot;Information&quot;
+        }
+    },
+    &quot;SignServerUrl&quot;: &quot;https://sign.lagrangecore.org/api/sign/25765&quot;,
+    &quot;MusicSignServerUrl&quot;: &quot;&quot;,
+    &quot;Account&quot;: {
+        &quot;Uin&quot;: 0,
+        &quot;Password&quot;: &quot;&quot;,
+        &quot;Protocol&quot;: &quot;Linux&quot;,
+        &quot;AutoReconnect&quot;: true,
+        &quot;GetOptimumServer&quot;: true
+    },
+    &quot;Message&quot;: {
+        &quot;IgnoreSelf&quot;: true,
+        &quot;StringPost&quot;: false
+    },
+    &quot;QrCode&quot;: {
+        &quot;ConsoleCompatibilityMode&quot;: false
+    },
+    &quot;Implementations&quot;: [
+        {
+            &quot;Type&quot;: &quot;ReverseWebSocket&quot;,
+            &quot;Host&quot;: &quot;127.0.0.1&quot;,   //地址，确保跟后文的NoneBot2保持一致
+            &quot;Port&quot;: 8080,   //端口，确保跟后文的NoneBot2保持一致
+            &quot;Suffix&quot;: &quot;/onebot/v11/ws&quot;,   //路径，默认不用动
+            &quot;ReconnectInterval&quot;: 5000,
+            &quot;HeartBeatInterval&quot;: 5000,
+            &quot;AccessToken&quot;: &quot;&quot;
+        }
+    ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;等待它蹦出二维码，扫它&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不用管了，放置它&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;&lt;strong&gt;安装 NoneBot2&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;用于实现逻辑，控制 Lagrange 收发消息&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;首先，你得装&lt;a href=&quot;https://www.python.org/downloads/&quot;&gt;Python&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;pypi 清华源：&lt;code&gt;pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;装 pipx：&lt;code&gt;pip install pipx&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;设置 pipx 全局变量：&lt;code&gt;pipx ensurepath&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;装 nb-cli：&lt;code&gt;pipx install nb-cli&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;如果找不到 nb 命令：&lt;/strong&gt; 对于 root 用户，你可以编辑 &lt;code&gt;/root/.bashrc&lt;/code&gt; 或 &lt;code&gt;/root/.profile&lt;/code&gt;（如果你使用的是 Bash）： &lt;code&gt;nano /root/.bashrc&lt;/code&gt; 添加以下行： &lt;code&gt;export PATH=&quot;$HOME/.local/bin:$PATH&quot;&lt;/code&gt; 保存并重新加载配置： &lt;code&gt;source /root/.bashrc&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;装 nb bootstrap：&lt;code&gt;nb self install nb-cli-plugin-bootstrap&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新建项目，选一个你喜欢的文件夹，然后：&lt;code&gt;nb bs&lt;/code&gt; （看不懂的就一路回车）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;C:\afbot&amp;gt;nb bs
+加载适配器列表中……
+请输入项目名称
+[?] 请输入 &amp;gt; onanibot
+[?] 请选择你想要使用的适配器 OneBot V11 (OneBot V11 协议)
+请输入 Bot 超级用户，超级用户拥有对 Bot 的最高权限（如对接 QQ 填 QQ 号即可）（留空回车结束输入）
+[?] 第 1 项 &amp;gt;
+请输入 Bot 昵称，消息以 Bot 昵称开头可以代替艾特（留空回车结束输入）
+[?] 第 1 项 &amp;gt;
+请输入 Bot 命令起始字符，消息以起始符开头将被识别为命令，
+如果有一个指令为 查询，当该配置项中有 &quot;/&quot; 时使用 &quot;/查询&quot; 才能够触发，
+留空将使用默认值 [&apos;&apos;, &apos;/&apos;, &apos;#&apos;]（留空回车结束输入）
+[?] 第 1 项 &amp;gt;
+请输入 Bot 命令分隔符，一般用于二级指令，
+留空将使用默认值 [&apos;.&apos;, &apos; &apos;]（留空回车结束输入）
+[?] 第 1 项 &amp;gt;
+请输入 NoneBot2 监听地址，如果要对公网开放，改为 0.0.0.0 即可
+[?] 请输入 &amp;gt; 127.0.0.1
+请输入 NoneBot2 监听端口，范围 1 ~ 65535，请保证该端口号与连接端配置相同，或与端口映射配置相关
+[?] 请输入 &amp;gt; 8080
+[?] 是否在项目目录中释出快捷启动脚本？ Yes
+[?] 是否将 localstore 插件的存储路径重定向到项目路径下以便于后续迁移 Bot？ Yes
+[?] 是否使用超级用户 Ping 指令回复插件？ Yes
+[?] 是否安装 logpile 插件提供日志记录到文件功能？ Yes
+[?] 是否在启动脚本中使用 webui 插件启动项目以使用网页管理 NoneBot？（该插件仍在开发中，不推荐用于生产环境） No
+成功新建项目 onanibot
+[?] 是否新建虚拟环境？ Yes
+正在 C:\afbot\onanibot\.venv 中创建虚拟环境
+创建虚拟环境成功
+[?] 是否需要修改或清除 pip 的 PyPI 镜像源配置？ No
+[?] 是否立即安装项目依赖？ Yes
+正在安装项目依赖
+依赖安装成功
+[?] 请选择需要启用的内置插件
+项目配置完毕，开始使用吧！
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;项目创建完毕后启动：&lt;code&gt;nb run&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;出现：&lt;code&gt;[INFO] nonebot | OneBot V11 | Bot XXXXXXXXXX connected&lt;/code&gt; 你就成功连接上 Lagrange 了&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;测试，发个&lt;code&gt;/ping&lt;/code&gt;，看是否出现Pong~&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果你要调试 NoneBot2，请先使用&lt;code&gt;nb&lt;/code&gt; 进入虚拟环境。然后使用&lt;code&gt;pip install &amp;lt;包名&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</content:encoded></item></channel></rss>
